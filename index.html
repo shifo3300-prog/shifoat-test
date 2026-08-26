@@ -1,2387 +1,4735 @@
 <!DOCTYPE html>
+
 <html lang="uz">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Testboshqaruv</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
+
   :root{
+
     --bg: #121217;
+
     --bg-2: #17171e;
+
     --panel: #1c1c24;
+
     --panel-2: #24242e;
+
     --panel-3: #2c2c38;
+
     --line: #34343f;
+
     --line-soft: #292933;
+
     --sub: #9696a8;
+
     --sub-dim: #6b6b7c;
+
     --white: #f1f1f7;
+
     --accent: #e8b84a;
+
     --accent-dim: rgba(232,184,74,0.14);
+
     --accent-2: #6ee7b7;
+
     --accent-2-dim: rgba(110,231,183,0.14);
+
     --accent-3: #7dd3fc;
+
     --accent-3-dim: rgba(125,211,252,0.14);
+
     --good: #6ee7b7;
+
     --bad: #f2707a;
+
     --bad-dim: rgba(242,112,122,0.14);
+
     --mono: 'JetBrains Mono', monospace;
+
     --sans: 'Manrope', system-ui, sans-serif;
+
     --ease: cubic-bezier(.2,.7,.3,1);
+
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+
     --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
+
     --shadow-lg: 0 20px 50px rgba(0,0,0,0.45);
+
   }
+
   *{ box-sizing:border-box; }
+
   html,body{ margin:0; padding:0; }
+
   body{
+
     background:
+
       radial-gradient(1200px 600px at 85% -10%, rgba(232,184,74,0.07), transparent 60%),
+
       radial-gradient(900px 500px at -10% 110%, rgba(110,231,183,0.06), transparent 60%),
+
       var(--bg);
+
     color: var(--white);
+
     font-family: var(--sans);
+
     min-height:100vh;
+
     -webkit-font-smoothing:antialiased;
+
   }
+
   ::selection{ background: var(--accent); color:#14141a; }
+
   .hidden{ display:none !important; }
+
   .app{ max-width: 1040px; margin: 0 auto; padding: 24px 20px 70px; }
+
   .center-screen{
+
     min-height: 100vh; display:flex; align-items:center; justify-content:center; padding:20px;
+
   }
+
   a, button, input, textarea{ font-family: inherit; }
 
   /* ---------- Brand mark ---------- */
+
   .brandmark{ display:flex; align-items:center; gap:10px; }
+
   .brandmark .bm-seal{
+
     width:30px; height:30px; border-radius:50%; border:1.5px dashed var(--accent);
+
     display:flex; align-items:center; justify-content:center; color:var(--accent);
+
     font-family:var(--mono); font-weight:700; font-size:12px; flex:none;
+
     transform: rotate(-8deg);
+
   }
+
   .brandmark h1{ font-size:19px; margin:0; font-weight:800; letter-spacing:-0.02em; }
+
   .brandmark h1 span{ color: var(--accent); }
+
   .card-brand{ display:flex; flex-direction:column; align-items:center; gap:14px; margin-bottom:24px; }
+
   .card-brand .bm-seal{ width:46px; height:46px; font-size:17px; }
 
   /* ---------- Auth cards ---------- */
+
   .card{
+
     background: linear-gradient(180deg, var(--panel), var(--panel) 60%, var(--panel-2));
+
     border:1px solid var(--line); border-radius:18px;
+
     padding: 34px 32px; width:100%; max-width: 380px;
+
     box-shadow: var(--shadow-lg);
+
     animation: rise .45s var(--ease);
+
   }
+
   @keyframes rise{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform:none; } }
+
   .card h2{ margin:0 0 6px; font-size:20px; text-align:center; letter-spacing:-0.01em; }
+
   .card p.sub{ color:var(--sub); font-size:13px; margin:0 0 22px; text-align:center; line-height:1.5; }
+
   label{ font-size:11.5px; color:var(--sub); display:block; margin-bottom:6px; margin-top:14px; text-transform:uppercase; letter-spacing:0.4px; font-weight:600; }
+
   input[type=text], input[type=password], textarea{
+
     width:100%; background: var(--panel-2); border:1px solid var(--line); color:var(--white);
+
     border-radius:10px; padding:12px 13px; font-family: var(--sans); font-size:14px;
+
     outline:none; transition: border-color .15s var(--ease), background .15s var(--ease);
+
   }
+
   input::placeholder, textarea::placeholder{ color: var(--sub-dim); }
+
   input:focus, textarea:focus{ border-color: var(--accent); background: var(--panel-3); }
+
   input[readonly]{ color: var(--sub); cursor:default; }
+
   textarea{ font-family: var(--mono); font-size:12.5px; resize:vertical; min-height:220px; line-height:1.65; }
 
   button{
+
     font-family: var(--sans); font-weight:700; font-size:13px;
+
     border-radius:10px; border:1px solid var(--line); padding:11px 18px; cursor:pointer;
+
     background: var(--panel-2); color:var(--white); transition: all .14s var(--ease);
+
   }
+
   button:hover{ border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
   button:active{ transform: translateY(0); }
+
   button.primary{ background: linear-gradient(135deg, var(--accent), #f0cd7a); color:#1a1408; border-color:transparent; box-shadow: 0 4px 14px rgba(232,184,74,0.25); }
+
   button.primary:hover{ opacity:.92; color:#1a1408; box-shadow: 0 6px 18px rgba(232,184,74,0.35); }
+
   button.ghost{ background:none; border-color:transparent; }
+
   button.danger:hover{ border-color: var(--bad); color: var(--bad); }
+
   button.small{ padding:7px 12px; font-size:12px; }
+
   button.full{ width:100%; margin-top:22px; }
+
   button:disabled{ opacity:.45; cursor:not-allowed; transform:none; }
+
   .error-msg{ color: var(--bad); font-size:12px; margin-top:10px; min-height:16px; line-height:1.5; }
+
   .success-msg{ color: var(--good); font-size:12px; margin-top:10px; min-height:16px; line-height:1.5; }
+
   .backdoor-hint{ text-align:center; margin-top:18px; }
+
   .backdoor-hint button{ font-size:11px; color:var(--sub-dim); border:none; background:none; text-decoration:underline; text-underline-offset:3px; }
+
   .backdoor-hint button:hover{ color:var(--sub); transform:none; }
 
   /* ---------- Topbar ---------- */
+
   .topbar{
+
     display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;
+
     flex-wrap:wrap; gap:12px;
+
   }
+
   .whoami{ color:var(--sub); font-size:12px; }
+
   .topbar-right{ display:flex; gap:10px; align-items:center; margin-left:auto; }
+
   .divider{ height:1px; background: linear-gradient(90deg, var(--line), transparent); margin: 18px 0 24px; }
 
   .toolbar{
+
     display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:22px;
+
   }
+
   .toolbar-left, .toolbar-right{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; }
+
   .toolbar-right{ justify-content:flex-end; }
+
   @media (max-width: 700px){
+
     .toolbar{ flex-direction:column; align-items:stretch; }
+
     .toolbar-right{ justify-content:flex-start; }
+
   }
 
   /* ---------- Stat strip ---------- */
+
   .stat-strip{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:26px; }
+
   .stat-card{
+
     background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px 18px;
+
     position:relative; overflow:hidden; transition: border-color .18s var(--ease), transform .18s var(--ease);
+
   }
+
   .stat-card:hover{ border-color: var(--accent); transform: translateY(-2px); }
+
   .stat-card::after{
+
     content:''; position:absolute; top:-30px; right:-30px; width:80px; height:80px; border-radius:50%;
+
     background: radial-gradient(circle, var(--accent-dim), transparent 70%);
+
   }
+
   .stat-card::before{
+
     content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+
     background: linear-gradient(180deg, var(--accent), var(--accent-2));
+
   }
+
   .stat-card .stat-num{ font-family:var(--mono); font-weight:700; font-size:26px; color:var(--white); }
+
   .stat-card .stat-label{ color:var(--sub); font-size:11.5px; margin-top:4px; text-transform:uppercase; letter-spacing:0.4px; }
 
   /* ---------- Search ---------- */
+
   .search-wrap{ position:relative; flex:1; min-width:180px; max-width:280px; }
+
   .search-wrap input{ padding-left:32px; }
+
   .search-wrap svg{ position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--sub-dim); pointer-events:none; }
 
   /* ---------- Section ---------- */
+
   .section-title{ font-size:13px; color:var(--sub); margin: 30px 0 12px; text-transform:uppercase; letter-spacing:0.6px; font-weight:700; display:flex; align-items:center; gap:8px; }
+
   .section-title::after{ content:''; flex:1; height:1px; background: var(--line-soft); }
 
   .grid-cards{ display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:12px; }
+
   .item-card{
+
     background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px 18px;
+
     cursor:pointer; transition: border-color .15s var(--ease), transform .15s var(--ease), box-shadow .15s var(--ease);
+
     position:relative;
+
   }
+
   .item-card:hover{ border-color: var(--accent); transform: translateY(-2px) scale(1.01); box-shadow: var(--shadow-md); }
+
   .item-card{ animation: rise .3s var(--ease); }
+
   .item-card .name{ font-weight:700; font-size:15px; margin-bottom:5px; letter-spacing:-0.01em; }
+
   .item-card .meta{ color:var(--sub); font-size:12px; display:flex; align-items:center; gap:6px; }
+
   .item-card .meta .dot{ width:4px; height:4px; border-radius:50%; background: var(--sub-dim); }
+
   .empty-state{ color:var(--sub); font-size:13px; padding: 26px 20px; text-align:center; background: var(--panel); border:1px dashed var(--line); border-radius:14px; }
 
   .backlink{
+
     color:var(--white); font-size:13px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+
     margin-bottom:18px; background: var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:9px 16px;
+
   }
+
   .backlink:hover{ color: var(--accent); border-color: var(--accent); }
 
   /* ---------- Rows w/ menu ---------- */
+
   .student-row{
+
     background: var(--panel); border:1px solid var(--line); border-radius:12px;
+
     padding:14px 18px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+
     cursor:pointer; position:relative; transition: border-color .15s var(--ease);
+
   }
+
   .student-row:hover{ border-color: var(--accent); }
+
   .student-row .sr-name{ font-weight:700; font-size:14.5px; }
+
   .student-row .sr-login{ color:var(--sub); font-size:12px; margin-top:2px; }
+
   .student-row .sr-right{ display:flex; align-items:center; gap:8px; }
+
   .student-row .sr-pass{ font-family: var(--mono); color: var(--accent); font-size:13px; }
+
   .student-row .sr-pass.masked{ color: var(--sub-dim); letter-spacing:2px; }
+
   .student-row .sr-copy{ background:none; border:none; color:var(--sub-dim); padding:4px 6px; border-radius:6px; }
+
   .student-row .sr-copy:hover{ color: var(--accent); background: var(--panel-2); transform:none; }
+
   .student-row .sr-dots{
+
     background:none; border:none; color:var(--sub); font-size:18px; font-weight:900;
+
     cursor:pointer; padding:4px 10px; border-radius:8px;
+
   }
+
   .student-row .sr-dots:hover{ background: var(--panel-2); color:var(--white); transform:none; }
+
   .sr-menu{
+
     position:absolute; top:44px; right:16px; background: var(--panel-3); border:1px solid var(--line);
+
     border-radius:10px; padding:6px; z-index:5; display:none; min-width:160px; box-shadow: var(--shadow-md);
+
   }
+
   .sr-menu.open{ display:block; }
+
   .sr-menu button{
+
     width:100%; text-align:left; background:none; border:none; color: var(--white);
+
     font-weight:600; padding:8px 10px; border-radius:6px; font-size:12.5px;
+
   }
+
   .sr-menu button:hover{ background: var(--panel-2); color:var(--white); border:none; transform:none; }
+
   .sr-menu button.danger-item{ color: var(--bad); }
+
   .sr-menu button.danger-item:hover{ background: var(--bad-dim); color: var(--bad); }
 
   .rename-inline{ display:flex; gap:8px; margin-top:10px; }
+
   .rename-inline input{ flex:1; }
 
   .change-panel{
+
     background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-top:18px;
+
   }
+
   .change-panel h3{ margin:0 0 4px; font-size:15px; }
+
   .change-panel .cp-current{ color:var(--sub); font-size:13px; margin-bottom:16px; }
+
   .change-panel .cp-current b{ color: var(--white); font-family:var(--mono); font-weight:600; }
+
   .change-actions{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+
   .change-form{ margin-top:16px; padding-top:16px; border-top:1px solid var(--line); }
 
   table{ width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+
   th,td{ text-align:left; padding:10px 10px; border-bottom:1px solid var(--line-soft); vertical-align:top; }
+
   th{ color:var(--sub); font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
+
   td.mono{ font-family: var(--mono); }
+
   .badge{ display:inline-block; padding:2px 9px; border-radius:20px; font-size:11px; font-weight:700; }
+
   .badge.ok{ background: var(--accent-2-dim); color: var(--good); }
+
   .badge.bad{ background: var(--bad-dim); color: var(--bad); }
 
   /* ---------- Stamp / grade seal (signature element) ---------- */
+
   .stamp{
+
     font-family:var(--mono); font-weight:700; font-size:13px; color:var(--accent);
+
     border:1.5px dashed var(--accent); border-radius:10px; padding:4px 10px;
+
     display:inline-block; transform: rotate(-2.5deg); background: var(--accent-dim);
+
     white-space:nowrap;
+
   }
+
   .stamp.low{ color:var(--bad); border-color:var(--bad); background: var(--bad-dim); }
+
   .stamp.high{ color:var(--good); border-color:var(--good); background: var(--accent-2-dim); }
 
   .result-block{ background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-bottom:14px; }
+
   .result-block .rb-head{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; gap:12px; }
+
   .result-block .rb-head .title{ font-weight:700; font-size:14px; }
+
   .result-block .rb-head .date{ color:var(--sub); font-size:11px; margin-top:2px; }
+
   .result-detail{ margin-top:14px; display:none; }
+
   .result-detail.open{ display:block; animation: rise .25s var(--ease); }
+
   .chev{ transition: transform .2s var(--ease); color:var(--sub); }
+
   .chev.open{ transform: rotate(180deg); }
 
   /* ---------- Leaderboard ---------- */
+
   .leader-row{
+
     display:flex; align-items:center; gap:14px; background:var(--panel); border:1px solid var(--line);
+
     border-radius:12px; padding:12px 16px; margin-bottom:8px;
+
   }
+
   .leader-rank{
+
     font-family:var(--mono); font-weight:700; font-size:13px; color:var(--sub); width:22px; text-align:center; flex:none;
+
   }
+
   .leader-rank.r1{ color:var(--accent); }
+
   .leader-name{ font-weight:700; font-size:13.5px; flex:1; }
+
   .leader-bar-wrap{ flex:2; height:6px; background:var(--panel-2); border-radius:4px; overflow:hidden; min-width:80px; }
+
   .leader-bar{ height:100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius:4px; transition: width .5s var(--ease); }
+
   .leader-pct{ font-family:var(--mono); font-size:12px; color:var(--sub); width:44px; text-align:right; flex:none; }
 
   /* ---------- Modal ---------- */
+
   .overlay{
+
     position:fixed; inset:0; background: rgba(10,10,14,0.7); backdrop-filter: blur(3px);
+
     display:none; align-items:center; justify-content:center; padding:20px; z-index:50;
+
   }
+
   .overlay.show{ display:flex; animation: fadeIn .18s var(--ease); }
+
   @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+
   .modal{
+
     background: var(--panel); border:1px solid var(--line); border-radius:18px;
+
     max-width: 560px; width:100%; padding:28px; max-height:88vh; overflow:auto;
-    box-shadow: var(--shadow-lg); animation: rise .22s var(--ease);
+
+    box-shadow: var(--shadow-lg); animation: rise .22s var(--ease); position:relative;
+
   }
+
   .modal.small{ max-width:400px; }
+
   .modal h2{ margin:0 0 4px; font-size:18px; letter-spacing:-0.01em; }
+
   .modal p.sub{ color:var(--sub); font-size:12.5px; margin:0 0 18px; line-height:1.6; }
+
   .modal .modal-actions{ display:flex; gap:10px; margin-top:20px; justify-content:flex-end; }
+
   .format-hint{
+
     background: var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:12px 14px;
+
     font-family: var(--mono); font-size:11.5px; color: var(--sub); line-height:1.6; margin-top:10px; white-space:pre-wrap;
+
   }
 
   /* ---------- Take test screen ---------- */
+
   .progress-wrap{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 16px; margin-bottom:18px; display:flex; align-items:center; gap:14px; }
+
   .progress-track{ flex:1; height:8px; background:var(--panel-2); border-radius:6px; overflow:hidden; }
+
   .progress-fill{ height:100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius:6px; transition: width .3s var(--ease); width:0%; }
+
   .progress-label{ font-family:var(--mono); font-size:12px; color:var(--sub); white-space:nowrap; }
 
   .q-block{ background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-bottom:14px; transition: border-color .15s var(--ease); }
+
   .q-block.answered{ border-color: var(--line); }
+
   .q-block .q-title{ font-weight:700; margin-bottom:12px; font-size:14.5px; display:flex; gap:10px; }
+
   .q-num{ font-family:var(--mono); color:var(--accent); flex:none; }
+
   .opt-row{ display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px; cursor:pointer; transition: background .12s; }
+
   .opt-row:hover{ background: var(--panel-2); }
+
   .opt-row input{ accent-color: var(--accent); width:15px; height:15px; }
+
   .opt-row label{ margin:0; color: var(--white); font-size:13.5px; cursor:pointer; }
 
-  /* ---------- Profile fab ---------- */
-  .profile-fab{
-    position: fixed; width:44px; height:44px; border-radius:50%;
-    background: var(--panel-2); border:1px solid var(--line); cursor:pointer;
-    display:flex; align-items:center; justify-content:center; overflow:hidden;
-    z-index:25; padding:0; font-weight:800; font-size:15px; color: var(--accent);
-    box-shadow: var(--shadow-md);
+  .opt-row.correct-hint{ background: var(--accent-2-dim); border:1px solid rgba(110,231,183,0.4); }
+
+  .correct-hint-tag{ margin-left:auto; font-size:10px; font-weight:700; color:var(--good); text-transform:uppercase; letter-spacing:0.3px; flex:none; }
+
+  /* ---------- Per-student "see correct answers" toggle (in the add-student modal) ---------- */
+
+  .modal-eye-toggle{
+
+    position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:50%;
+
+    background: var(--panel-2); border:1px solid var(--line); color: var(--sub-dim);
+
+    display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer;
+
+    transition: all .14s var(--ease);
+
   }
+
+  .modal-eye-toggle:hover{ border-color: var(--accent-2); color: var(--accent-2); transform:none; }
+
+  .modal-eye-toggle.on{ color: var(--good); border-color: var(--good); background: var(--accent-2-dim); }
+
+  /* ---------- Profile fab ---------- */
+
+  .profile-fab{
+
+    position: fixed; width:44px; height:44px; border-radius:50%;
+
+    background: var(--panel-2); border:1px solid var(--line); cursor:pointer;
+
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+
+    z-index:25; padding:0; font-weight:800; font-size:15px; color: var(--accent);
+
+    box-shadow: var(--shadow-md);
+
+  }
+
   .profile-fab:hover{ border-color: var(--accent); transform: translateY(-1px); }
+
   .profile-fab img{ width:100%; height:100%; object-fit:cover; }
 
   .profile-avatar-big{
+
     width:96px; height:96px; border-radius:50%; background: var(--panel-2);
+
     border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+
     overflow:hidden; cursor:pointer; margin:0 auto 18px; font-size:30px; font-weight:800; color:var(--accent);
+
     position:relative;
+
   }
+
   .profile-avatar-big img{ width:100%; height:100%; object-fit:cover; }
+
   .profile-avatar-big .pf-hint{
+
     position:absolute; bottom:0; left:0; right:0; background: rgba(0,0,0,0.6); color:var(--white);
+
     font-size:9.5px; text-align:center; padding:5px 0; font-weight:600;
+
   }
+
   .profile-card{ max-width:380px; margin: 30px auto 0; text-align:center; }
+
   .profile-card .p-login{ color:var(--sub); font-size:12px; margin-bottom:2px; }
+
   .profile-card .p-login b{ color:var(--white); font-size:15px; display:block; margin-top:4px; font-family:var(--mono); }
 
   /* ---------- Toasts ---------- */
+
   #toastHost{ position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:100; display:flex; flex-direction:column; gap:8px; align-items:center; }
+
   .toast{
+
     background: var(--panel-3); border:1px solid var(--line); color:var(--white); font-size:13px; font-weight:600;
+
     padding:11px 18px; border-radius:10px; box-shadow: var(--shadow-lg); display:flex; align-items:center; gap:8px;
+
     animation: toastIn .25s var(--ease);
+
   }
+
   .toast.ok{ border-color: var(--accent-2); }
+
   .toast.err{ border-color: var(--bad); }
+
   .toast .dot{ width:7px; height:7px; border-radius:50%; background: var(--accent-2); flex:none; }
+
   .toast.err .dot{ background: var(--bad); }
+
   @keyframes toastIn{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform:none; } }
+
   @keyframes toastOut{ from{ opacity:1; } to{ opacity:0; transform: translateY(6px); } }
 
   /* ---------- Groups, filters, charts, timer, images, explanations ---------- */
+
   select{
+
     width:100%; background: var(--panel-2); border:1px solid var(--line); color:var(--white);
+
     border-radius:10px; padding:12px 13px; font-family: var(--sans); font-size:14px; outline:none;
+
     transition: border-color .15s var(--ease), background .15s var(--ease); cursor:pointer; appearance:none;
+
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239696a8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+
     background-repeat:no-repeat; background-position: right 12px center; padding-right:34px;
+
   }
+
   select:focus{ border-color: var(--accent); background-color: var(--panel-3); }
+
   .group-badge{
+
     display:inline-flex; align-items:center; gap:5px; background: var(--accent-3-dim); color: var(--accent-3);
+
     border:1px solid rgba(125,211,252,0.3); border-radius:20px; padding:2px 10px; font-size:11px; font-weight:700;
+
   }
+
   .group-badge.none{ background: var(--panel-2); color: var(--sub-dim); border-color: var(--line); }
+
   .chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+
   .chip{
+
     display:inline-flex; align-items:center; gap:6px; background: var(--panel-2); border:1px solid var(--line);
+
     border-radius:20px; padding:6px 12px; font-size:12.5px; font-weight:600; cursor:pointer; user-select:none;
+
     transition: all .12s var(--ease); color: var(--sub);
+
   }
+
   .chip input{ accent-color: var(--accent); width:14px; height:14px; margin:0; }
+
   .chip.checked{ border-color: var(--accent); color: var(--white); background: var(--accent-dim); }
+
   .filter-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+
   .filter-select{ max-width:190px; }
+
   .field-inline{ display:flex; gap:14px; flex-wrap:wrap; }
+
   .field-inline > div{ flex:1; min-width:150px; }
 
   .chart-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(270px,1fr)); gap:14px; margin-bottom:8px; }
+
   .chart-card{ background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px; }
+
   .chart-card .chart-title{ font-size:11.5px; color:var(--sub); text-transform:uppercase; letter-spacing:0.4px; font-weight:700; margin-bottom:14px; }
+
   .chart-card svg text{ font-family: var(--mono); fill: var(--sub); }
+
   .bar-empty{ color:var(--sub-dim); font-size:12.5px; text-align:center; padding:34px 0; }
 
   .timer-pill{
+
     font-family: var(--mono); font-weight:700; font-size:13px; color: var(--white); background: var(--panel-2);
+
     border:1px solid var(--line); border-radius:10px; padding:8px 14px; display:flex; align-items:center; gap:7px; flex:none;
+
   }
+
   .timer-pill.warn{ color: var(--bad); border-color: var(--bad); background: var(--bad-dim); animation: pulseWarn 1s infinite; }
+
   @keyframes pulseWarn{ 0%,100%{ opacity:1; } 50%{ opacity:.55; } }
 
   .q-image{ max-width:100%; max-height:280px; object-fit:contain; border-radius:10px; margin-bottom:12px; display:block; border:1px solid var(--line); background:var(--panel-2); }
+
   .q-image-tools{ display:flex; gap:10px; align-items:center; margin:12px 0 4px; flex-wrap:wrap; }
+
   .q-image-tools img{ max-height:56px; border-radius:8px; border:1px solid var(--line); }
+
   .explain-box{
+
     background: var(--accent-2-dim); border:1px solid rgba(110,231,183,0.3); border-radius:10px; padding:10px 13px;
+
     font-size:12.5px; color: var(--white); margin-top:10px; line-height:1.5;
+
   }
+
   .explain-box b{ color: var(--good); }
+
   textarea.explain-input{ font-family: var(--sans); min-height:52px; font-size:13px; margin-top:10px; }
+
   .multi-hint{ font-size:11px; color: var(--sub-dim); margin-top:2px; margin-bottom:8px; }
 
   .item-card .badges{ display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+
   .mini-badge{
+
     font-size:10px; font-weight:700; letter-spacing:0.3px; text-transform:uppercase; padding:3px 8px; border-radius:20px;
+
     background: var(--panel-3); color: var(--sub);
+
   }
+
   .mini-badge.timer{ color: var(--accent); background: var(--accent-dim); }
+
   .mini-badge.shuffle{ color: var(--accent-2); background: var(--accent-2-dim); }
+
   .mini-badge.group{ color: var(--accent-3); background: var(--accent-3-dim); }
 
   .group-row-select{ max-width:150px; }
 
-  @media (max-width: 640px){
-    .app{ padding: 18px 14px 60px; }
-    .profile-fab{ width:40px; height:40px; }
-    .chart-grid{ grid-template-columns: 1fr; }
+  /* ---------- Answers eye toggle (draggable) ---------- */
+
+  .eye-toggle-fab{
+
+    position: fixed; width:44px; height:44px; border-radius:50%;
+
+    background: var(--panel-2); border:1px solid var(--line); cursor:grab;
+
+    display:flex; align-items:center; justify-content:center;
+
+    z-index:26; padding:0; color: var(--accent-2);
+
+    box-shadow: var(--shadow-md); transition: border-color .15s var(--ease), color .15s var(--ease);
+
+    touch-action:none;
+
   }
+
+  .eye-toggle-fab.dragging{ cursor:grabbing; }
+
+  .eye-toggle-fab:hover{ border-color: var(--accent-2); }
+
+  .eye-toggle-fab.answers-off{ color: var(--bad); border-color: var(--bad); background: var(--bad-dim); }
+
+  .eye-toggle-fab svg{ pointer-events:none; }
+
+  .answer-mask{ display:none; color: var(--sub-dim); letter-spacing:3px; }
+
+  /* Admin answer visibility: hiding the eye removes only the correct-answer hints. */
+
+  body.answers-hidden .correct-hint{ background: transparent; border-color: transparent; }
+
+  body.answers-hidden .correct-hint-tag{ display:none; }
+
+  body.answers-hidden .answer-real{ display:none; }
+
+  body.answers-hidden .answer-mask{ display:inline; }
+
+  body.answers-hidden .correct-hint{ background:transparent; border-color:transparent; }
+
+  body.answers-hidden .correct-hint-tag{ display:none; }
+
+  body.answers-hidden .correct-hint{ background:transparent; border-color:transparent; }
+
+  body.answers-hidden .correct-hint-tag{ display:none; }
+
+  @media (max-width: 640px){
+
+    .app{ padding: 18px 14px 60px; }
+
+    .profile-fab{ width:40px; height:40px; }
+
+    .chart-grid{ grid-template-columns: 1fr; }
+
+  }
+
 </style>
+
 </head>
+
 <body>
 
 <div id="toastHost"></div>
 
 <!-- LOADING SCREEN -->
+
 <div id="loadingScreen" class="center-screen">
+
   <div class="card-brand"><div class="bm-seal">TB</div></div>
+
 </div>
 
 <!-- SETUP SCREEN -->
+
 <div id="setupScreen" class="center-screen hidden">
+
   <div class="card">
+
     <div class="card-brand"><div class="bm-seal">TB</div></div>
+
     <h2>Admin akkauntini sozlash</h2>
+
     <p class="sub">Birinchi marta ishga tushiryapsiz. Admin login va parolini o'rnating.</p>
+
     <label>Admin foydalanuvchi nomi</label>
+
     <input type="text" id="setupUsername" placeholder="Masalan: admin2026" maxlength="30">
+
     <label>Parol o'rnating</label>
+
     <input type="password" id="setupPassword" placeholder="Kamida 3 belgi" maxlength="25">
+
     <button class="primary full" id="setupBtn">Admin yaratish</button>
+
     <div class="error-msg" id="setupError"></div>
+
   </div>
+
 </div>
 
 <!-- LOGIN SCREEN -->
+
 <div id="loginScreen" class="center-screen hidden">
+
   <div class="card">
+
     <div class="card-brand"><div class="bm-seal">TB</div></div>
+
     <h2>Tizimga kirish</h2>
+
     <p class="sub">Admin yoki o'quvchi sifatida kiring</p>
+
     <label>Foydalanuvchi nomi</label>
+
     <input type="text" id="loginUsername" placeholder="Ism yoki login" onkeydown="if(event.key==='Enter') document.getElementById('loginPassword').focus();">
+
     <label>Parol</label>
+
     <input type="password" id="loginPassword" placeholder="Parol (ixtiyoriy)" maxlength="25" onkeydown="if(event.key==='Enter') document.getElementById('loginBtn').click();">
+
     <button class="primary full" id="loginBtn">Kirish</button>
+
     <div class="error-msg" id="loginError"></div>
+
   </div>
+
 </div>
 
 <!-- ADMIN RECOVERY SCREEN -->
+
 <div id="adminRecoveryScreen" class="center-screen hidden">
+
   <div class="card">
+
     <div class="card-brand"><div class="bm-seal">TB</div></div>
+
     <h2>Admin login va parol</h2>
+
     <p class="sub">Quyida joriy admin login va parolingiz ko'rsatilgan.</p>
+
     <label>Login</label>
+
     <input type="text" id="recoveryLoginVal" readonly>
+
     <label>Parol</label>
+
     <input type="text" id="recoveryPasswordVal" readonly>
+
     <button class="primary full" id="recoveryBackBtn">Kirish sahifasiga qaytish</button>
+
   </div>
+
 </div>
 
 <!-- ADMIN DASHBOARD -->
+
 <div id="adminScreen" class="hidden">
+
   <div class="app">
+
     <button class="profile-fab" id="openAdminProfile" title="Profil" style="top:22px; right:22px; position:fixed;"></button>
+
     <div class="topbar">
+
       <div class="brandmark"><div class="bm-seal">TB</div><h1>test<span>boshqaruv</span></h1></div>
+
       <div class="topbar-right">
+
         <span class="whoami" id="adminWho"></span>
+
         <button id="adminLogout">Chiqish</button>
+
       </div>
+
     </div>
+
     <div class="divider"></div>
 
     <div class="stat-strip" id="statStrip"></div>
 
     <div class="toolbar">
+
       <div class="toolbar-left">
+
         <button class="primary" id="openAddStudent">+ O'quvchi qo'shish</button>
+
         <button class="primary" id="openCreateTest">+ Test yaratish</button>
+
       </div>
+
       <div class="toolbar-right">
+
         <button id="openLoginChange">Login o'zgartirish</button>
+
         <button id="openStudentPasswords">Parollar</button>
+
         <button id="openManageGroups">Guruhlar</button>
+
         <button id="openManageTests">Testlarni boshqarish</button>
+
         <button id="openManageStudents">O'quvchilarni boshqarish</button>
+
         <button id="exportCsvBtn">CSV yuklab olish</button>
+
       </div>
+
     </div>
 
     <div class="section-title">Statistika</div>
+
     <div class="chart-grid" id="chartGrid"></div>
 
     <div class="section-title">O'quvchilar</div>
+
     <div class="filter-row">
+
       <div class="search-wrap">
+
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+
         <input type="text" id="studentSearch" placeholder="O'quvchi qidirish...">
+
       </div>
+
       <select id="groupFilterSelect" class="filter-select"><option value="">Barcha guruhlar</option></select>
+
     </div>
+
     <div class="grid-cards" id="studentsGrid"></div>
 
     <div class="section-title">Reyting</div>
+
     <div id="leaderboard"></div>
 
     <div class="section-title">Testlar</div>
+
     <div class="toolbar-left" style="margin-bottom:12px;">
+
       <div class="search-wrap">
+
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+
         <input type="text" id="testSearch" placeholder="Test qidirish...">
+
       </div>
+
     </div>
+
     <div class="grid-cards" id="testsGrid"></div>
+
   </div>
+
 </div>
 
 <!-- LOGIN/PASSWORD CHANGE SCREEN -->
+
 <div id="loginChangeScreen" class="hidden">
+
   <div class="app">
+
     <button type="button" class="backlink" id="backFromLoginChange">← Orqaga</button>
+
     <div class="topbar"><h1>Login o'zgartirish</h1></div>
+
     <div class="divider"></div>
+
     <div id="loginChangeList" class="grid-cards"></div>
+
     <div id="loginChangeDetail"></div>
+
   </div>
+
 </div>
 
 <!-- STUDENT PASSWORDS VIEW SCREEN -->
+
 <div id="studentPasswordsScreen" class="hidden">
+
   <div class="app">
+
     <button type="button" class="backlink" id="backFromPasswords">← Orqaga</button>
+
     <div class="topbar"><h1>O'quvchi parollari</h1></div>
+
     <p class="sub" style="margin-bottom:16px;">O'quvchini bosing — paroli ko'rinadi. Nusxalash uchun ⧉ tugmasini bosing.</p>
+
     <div id="passwordsList"></div>
+
   </div>
+
 </div>
 
 <!-- MANAGE / DELETE STUDENTS SCREEN -->
+
 <div id="manageStudentsScreen" class="hidden">
+
   <div class="app">
+
     <button type="button" class="backlink" id="backFromManage">← Orqaga</button>
+
     <div class="topbar"><h1>O'quvchilarni boshqarish</h1></div>
+
     <div id="manageStudentsList"></div>
+
   </div>
+
 </div>
 
 <!-- STUDENT DETAIL (ADMIN VIEW) -->
+
 <div id="studentDetailScreen" class="hidden">
+
   <div class="app">
+
     <button type="button" class="backlink" id="backToAdmin">← Orqaga</button>
+
     <div class="topbar">
+
       <h1 id="studentDetailName"></h1>
+
     </div>
+
     <div id="studentDetailStats" class="stat-strip"></div>
+
     <div id="studentResultsArea"></div>
+
   </div>
+
 </div>
 
 <!-- STUDENT HOME -->
+
 <div id="studentScreen" class="hidden">
+
   <div class="app">
+
     <button class="profile-fab" id="openStudentProfile" title="Profil" style="top:22px; right:22px; position:fixed;"></button>
+
     <div class="topbar">
+
       <div class="brandmark"><div class="bm-seal">TB</div><h1>test<span>boshqaruv</span></h1></div>
+
       <div class="topbar-right">
+
         <span class="whoami" id="studentWho"></span>
+
         <button id="studentLogout">Chiqish</button>
+
       </div>
+
     </div>
+
     <div class="divider"></div>
+
     <div id="studentPermissionsArea"></div>
+
     <div class="section-title">Mavjud testlar</div>
+
     <div class="grid-cards" id="availableTestsGrid"></div>
+
     <div class="section-title">Topshirilgan testlar</div>
+
     <div class="grid-cards" id="doneTestsGrid"></div>
+
   </div>
+
 </div>
 
 <!-- TAKE TEST SCREEN -->
+
 <div id="takeTestScreen" class="hidden">
+
+  <button class="eye-toggle-fab" id="answersEyeBtn" title="Javoblarni yashirish" aria-label="Javoblarni yashirish"></button>
+
   <div class="app">
+
     <button type="button" class="backlink" id="backFromTest">← Bekor qilish</button>
+
     <div class="topbar">
+
       <h1 id="takeTestTitle"></h1>
+
     </div>
+
     <div class="progress-wrap">
+
       <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
       <div class="progress-label" id="progressLabel">0/0</div>
+
       <div class="timer-pill hidden" id="testTimerPill">⏱ <span id="timerText">00:00</span></div>
+
     </div>
+
     <div id="takeTestQuestions"></div>
+
     <button class="primary" id="submitTestBtn" style="margin-top:6px;">Javoblarni yuborish</button>
+
   </div>
+
 </div>
 
 <!-- PROFILE SCREEN -->
+
 <div id="profileScreen" class="hidden">
+
   <div class="app">
+
     <button type="button" class="backlink" id="backFromProfile">← Orqaga</button>
+
     <div class="topbar"><h1>Profil</h1></div>
+
     <div class="profile-card">
+
       <div class="profile-avatar-big" id="profileAvatarBtn">
+
         <span id="profileAvatarInitial"></span>
+
         <img id="profileAvatarImg" class="hidden">
+
         <div class="pf-hint">Rasm qo'yish</div>
+
       </div>
+
       <input type="file" id="profileAvatarInput" accept="image/*" class="hidden">
+
       <div class="p-login">Login<b id="profileLoginText"></b></div>
+
       <div id="profileEditArea"></div>
+
     </div>
+
   </div>
+
 </div>
 
 <!-- MANAGE GROUPS SCREEN -->
+
 <div id="manageGroupsScreen" class="hidden">
+
   <div class="app">
+
     <button type="button" class="backlink" id="backFromManageGroups">← Orqaga</button>
+
     <div class="topbar"><h1>Guruhlarni boshqarish</h1></div>
+
     <div class="change-panel" style="margin-bottom:22px;">
+
       <h3>Yangi guruh yaratish</h3>
+
       <p class="cp-current" style="margin-top:4px;">Masalan sinf yoki oqim nomi: 9-A, IELTS-2, DTM-guruh</p>
+
       <div class="field-inline" style="margin-top:6px; align-items:flex-end;">
+
         <div><input type="text" id="newGroupName" placeholder="Guruh nomi"></div>
+
         <div style="flex:none;"><button class="primary" id="addGroupBtn">Qo'shish</button></div>
+
       </div>
+
       <div class="error-msg" id="addGroupError"></div>
+
     </div>
+
     <div id="manageGroupsList"></div>
+
   </div>
+
 </div>
 
 <!-- MANAGE / DELETE TESTS SCREEN -->
+
 <div id="manageTestsScreen" class="hidden">
+
   <div class="app">
+
     <button type="button" class="backlink" id="backFromManageTests">← Orqaga</button>
+
     <div class="topbar"><h1>Testlarni boshqarish</h1></div>
+
     <div id="manageTestsList"></div>
+
   </div>
+
 </div>
 
 <!-- ADD STUDENT MODAL -->
+
 <div class="overlay" id="addStudentOverlay">
+
   <div class="modal small">
+
+    <button type="button" class="modal-eye-toggle" id="newStudentSeeAnswersBtn" title="Javoblarni ko'rish huquqi: yopiq"></button>
+
     <h2>O'quvchi qo'shish</h2>
+
     <p class="sub">Yangi o'quvchi uchun ism va parol kiriting.</p>
+
     <label>Ism familiya</label>
+
     <input type="text" id="newStudentName" placeholder="Masalan: Aziz Karimov">
+
     <label>Parol (ixtiyoriy)</label>
+
     <input type="password" id="newStudentPassword" placeholder="Bo'sh qoldirsa — parolsiz" maxlength="25">
+
     <label>Guruh</label>
+
     <select id="newStudentGroup"><option value="">Guruhsiz</option></select>
+
     <div class="opt-row" style="padding-left:0; margin-top:14px;">
+
       <input type="checkbox" id="newStudentCanView" style="width:16px; height:16px; accent-color: var(--accent);">
+
       <label for="newStudentCanView" style="margin:0; text-transform:none; letter-spacing:0; font-size:13px; color:var(--white); font-weight:600; cursor:pointer;">Boshqa o'quvchilar natijalarini ko'rish va CSV yuklab olish huquqini berish</label>
+
     </div>
+
     <div class="opt-row" style="padding-left:0;">
+
       <input type="checkbox" id="newStudentIsAdmin" style="width:16px; height:16px; accent-color: var(--accent);">
+
       <label for="newStudentIsAdmin" style="margin:0; text-transform:none; letter-spacing:0; font-size:13px; color:var(--white); font-weight:600; cursor:pointer;">Admin qilib tayinlash (o'quvchi va testlarni o'chira olmaydi)</label>
+
     </div>
+
+    <div class="multi-hint">Burchakdagi ko'z yopiq — bu o'quvchi oddiy tarzda test yechadi. Ko'zni ochsangiz, bu o'quvchi test yechayotganda to'g'ri javoblarni ko'rib turadi.</div>
+
     <div class="error-msg" id="addStudentError"></div>
+
     <div class="modal-actions">
+
       <button id="cancelAddStudent">Bekor qilish</button>
+
       <button class="primary" id="createStudentBtn">O'quvchi yaratish</button>
+
     </div>
+
   </div>
+
 </div>
 
 <!-- CREATE TEST MODAL -->
+
 <div class="overlay" id="createTestOverlay">
+
   <div class="modal">
+
     <div id="createTestStep1">
+
       <h2>Test yaratish</h2>
+
       <p class="sub">Test nomini kiriting va savollarni matn ko'rinishida joylashtiring. Variantlar bir qatorda (A) 5  B) 6  C) 7  D) 8) yoki alohida qatorlarda bo'lishi mumkin. To'g'ri javobni ko'rsatmasangiz ham bo'ladi — keyingi bosqichda o'zingiz belgilaysiz.</p>
+
       <label>Test nomi</label>
+
       <input type="text" id="newTestTitle" placeholder="Masalan: Matematika — 1-nazorat">
+
       <label>Savollar matni</label>
+
       <textarea id="newTestText" placeholder="Quyidagi formatda joylashtiring..."></textarea>
+
       <div class="format-hint">1. Savol matni?
+
 A) variant   B) variant   C) variant   D) variant
 
 2. Keyingi savol?
+
 A) variant
+
 B) variant
+
 Javob: B  (ixtiyoriy — ko'rsatmasangiz keyingi bosqichda tanlaysiz)</div>
+
       <div class="field-inline" style="margin-top:16px;">
+
         <div>
+
           <label>Vaqt limiti (daqiqa)</label>
+
           <input type="text" id="newTestTimeLimit" placeholder="0 = cheklanmagan" inputmode="numeric">
+
         </div>
+
         <div style="display:flex; align-items:flex-end;">
+
           <div class="opt-row" style="padding-left:0; margin:0;">
+
             <input type="checkbox" id="newTestRandomize" style="width:16px; height:16px; accent-color: var(--accent);">
+
             <label for="newTestRandomize" style="margin:0; text-transform:none; letter-spacing:0; font-size:13px; color:var(--white); font-weight:600; cursor:pointer;">Savollarni aralashtirish</label>
+
           </div>
+
         </div>
+
       </div>
+
       <label style="margin-top:16px;">Kimlar uchun ochiq</label>
+
       <div class="multi-hint">Hech biri belgilanmasa — barcha o'quvchilarga ochiq bo'ladi.</div>
+
       <div class="chip-row" id="newTestGroupsChips"></div>
+
       <div class="opt-row" style="padding-left:0; margin-top:14px;">
+
         <input type="checkbox" id="newTestForceReview" style="width:16px; height:16px; accent-color: var(--accent);">
+
         <label for="newTestForceReview" style="margin:0; text-transform:none; letter-spacing:0; font-size:13px; color:var(--white); font-weight:600; cursor:pointer;">Saqlashdan oldin ko'rib chiqaman (rasm/izoh qo'shish uchun)</label>
+
       </div>
+
       <div class="error-msg" id="createTestError"></div>
+
       <div class="modal-actions">
+
         <button id="cancelCreateTest">Bekor qilish</button>
+
         <button class="primary" id="parseTestBtn">Davom etish</button>
+
       </div>
+
     </div>
+
     <div id="createTestStep2" class="hidden">
+
       <h2>To'g'ri javoblarni tasdiqlang</h2>
+
       <p class="sub">Matndan aniqlangan to'g'ri javob oldindan belgilangan. Kerak bo'lsa o'zgartiring, aniqlanmagan savollar uchun variantni tanlang.</p>
+
       <div id="reviewQuestions"></div>
+
       <div class="error-msg" id="reviewError"></div>
+
       <div class="success-msg" id="createTestSuccess"></div>
+
       <div class="modal-actions">
+
         <button id="backToStep1">Orqaga</button>
+
         <button class="primary" id="saveTestBtn">Testni saqlash</button>
+
       </div>
+
     </div>
+
   </div>
+
 </div>
 
 <!-- CONFIRM MODAL (generic) -->
+
 <div class="overlay" id="confirmOverlay">
+
   <div class="modal small">
+
     <h2 id="confirmTitle">Ishonchingiz komilmi?</h2>
+
     <p class="sub" id="confirmMessage"></p>
+
     <div class="modal-actions">
+
       <button id="confirmCancelBtn">Bekor qilish</button>
+
       <button class="primary danger" id="confirmOkBtn">Ha, davom etish</button>
+
     </div>
+
   </div>
+
 </div>
 
 <script>
+
   // Creates a promise other scripts can await, resolved once Firebase is ready below.
+
   window.__firebaseResolve = null;
+
   window.firebaseInitPromise = new Promise(res => { window.__firebaseResolve = res; });
+
 </script>
+
 <script type="module">
+
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
   const firebaseConfig = {
+
     apiKey: "AIzaSyDBKUQQuVl0h_d2PKU67ZK6d4gACPdh_Jk",
+
     authDomain: "shifoat-test.firebaseapp.com",
+
     projectId: "shifoat-test",
+
     storageBucket: "shifoat-test.firebasestorage.app",
+
     messagingSenderId: "746235908335",
+
     appId: "1:746235908335:web:82b815d83a4dd4a6bbcb1a",
+
     measurementId: "G-4Q6SQ4ZDG4"
+
   };
 
   const firebaseApp = initializeApp(firebaseConfig);
+
   const db = getFirestore(firebaseApp);
+
   const stateDocRef = doc(db, "app", "state");
 
   window.firebaseLoadState = async function(){
+
     const snap = await getDoc(stateDocRef);
+
     if(snap.exists()) return snap.data();
+
     return null;
+
   };
 
   window.firebaseSaveState = async function(stateObj){
+
     await setDoc(stateDocRef, JSON.parse(JSON.stringify(stateObj)));
+
   };
 
   window.__firebaseResolve();
+
 </script>
+
 <script>
+
 (function(){
+
   const STORAGE_KEY = 'state';
 
   async function loadState(){
+
     try{
+
       await window.firebaseInitPromise;
+
       const data = await window.firebaseLoadState();
+
       if(data) return data;
+
     }catch(e){ console.error('loadState error', e); }
+
     return { admin: null, groups: [], students: [], tests: [], results: [] };
+
   }
 
   // Brings older saved states up to the current data shape so new features
+
   // (groups, timers, multi-answer questions, images, explanations) work
+
   // even on data created before they existed.
+
   function migrateState(s){
+
     if(!Array.isArray(s.groups)) s.groups = [];
+
     if(!Array.isArray(s.students)) s.students = [];
+
     if(!Array.isArray(s.tests)) s.tests = [];
+
     if(!Array.isArray(s.results)) s.results = [];
+
     s.students.forEach(st => {
+
       if(st.group === undefined) st.group = null;
+
+      if(typeof st.canSeeAnswers !== 'boolean') st.canSeeAnswers = false;
+
     });
+
     s.tests.forEach(t => {
+
       if(typeof t.timeLimitMin !== 'number') t.timeLimitMin = 0;
+
       if(typeof t.randomize !== 'boolean') t.randomize = false;
+
       if(!Array.isArray(t.groupIds)) t.groupIds = [];
+
       t.questions.forEach(q => {
+
         if(!Array.isArray(q.correctIndexes)){
+
           q.correctIndexes = (typeof q.correctIndex === 'number' && q.correctIndex >= 0) ? [q.correctIndex] : [];
+
         }
+
         if(q.image === undefined) q.image = null;
+
         if(typeof q.explanation !== 'string') q.explanation = '';
+
       });
+
     });
+
     s.results.forEach(r => {
+
       r.answers.forEach(a => {
+
         if(!Array.isArray(a.selectedIndexes)){
+
           a.selectedIndexes = (typeof a.selectedIndex === 'number' && a.selectedIndex !== null) ? [a.selectedIndex] : [];
+
         }
+
       });
+
     });
+
     return s;
+
   }
+
   function saveState(){
+
     try{
+
       window.firebaseInitPromise.then(() => window.firebaseSaveState(state)).catch(e => {
+
         console.error('saveState error', e);
+
         toast("Ma'lumotni saqlashda xatolik yuz berdi.", 'err');
+
       });
+
     }catch(e){ console.error('saveState error', e); }
+
   }
 
   let state = { admin: null, groups: [], students: [], tests: [], results: [] };
+
   let session = null; // { role:'admin'|'subadmin'|'student', id }
 
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
 
   // ---------- Groups ----------
+
   function groupNameById(id){
+
     const g = state.groups.find(g => g.id === id);
+
     return g ? g.name : null;
+
   }
+
   function populateGroupSelect(selectEl, selectedId){
+
     selectEl.innerHTML = '<option value="">Guruhsiz</option>' +
+
       state.groups.map(g => `<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('');
+
     selectEl.value = selectedId || '';
+
   }
+
   function groupBadgeHtml(groupId){
+
     const name = groupNameById(groupId);
+
     return name ? `<span class="group-badge">${escapeHtml(name)}</span>` : `<span class="group-badge none">Guruhsiz</span>`;
+
   }
+
   function testVisibleToStudent(test, student){
+
     if(!test.groupIds || test.groupIds.length === 0) return true;
+
     return !!student.group && test.groupIds.includes(student.group);
+
   }
 
   // ---------- Small helpers for scoring / multi-answer ----------
+
   function arraysEqualAsSets(a, b){
+
     if(!Array.isArray(a) || !Array.isArray(b)) return false;
+
     if(a.length !== b.length) return false;
+
     const sa = [...a].sort();
+
     const sb = [...b].sort();
+
     return sa.every((v,i) => v === sb[i]);
+
   }
+
   function formatClock(totalSeconds){
+
     const m = Math.floor(totalSeconds / 60);
+
     const s = totalSeconds % 60;
+
     return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+
   }
 
   // ---------- Toasts ----------
+
   function toast(msg, type){
+
     const host = document.getElementById('toastHost');
+
     const el = document.createElement('div');
+
     el.className = 'toast ' + (type === 'err' ? 'err' : 'ok');
+
     el.innerHTML = '<span class="dot"></span><span></span>';
+
     el.querySelector('span:last-child').textContent = msg;
+
     host.appendChild(el);
+
     setTimeout(() => {
+
       el.style.animation = 'toastOut .2s ease forwards';
+
       setTimeout(() => el.remove(), 200);
+
     }, 2400);
+
   }
 
   // ---------- Confirm modal ----------
+
   const confirmOverlay = document.getElementById('confirmOverlay');
+
   let confirmCallback = null;
+
   function askConfirm(title, message, onOk){
+
     document.getElementById('confirmTitle').textContent = title;
+
     document.getElementById('confirmMessage').textContent = message;
+
     confirmCallback = onOk;
+
     confirmOverlay.classList.add('show');
+
   }
+
   document.getElementById('confirmCancelBtn').addEventListener('click', () => {
+
     confirmOverlay.classList.remove('show');
+
     confirmCallback = null;
+
   });
+
   document.getElementById('confirmOkBtn').addEventListener('click', () => {
+
     confirmOverlay.classList.remove('show');
+
     if(confirmCallback) confirmCallback();
+
     confirmCallback = null;
+
   });
 
   // ---------- Screen helpers ----------
+
   const screens = ['loadingScreen','setupScreen','loginScreen','adminRecoveryScreen','adminScreen','studentDetailScreen','studentScreen','takeTestScreen','loginChangeScreen','studentPasswordsScreen','manageStudentsScreen','profileScreen','manageTestsScreen','manageGroupsScreen'];
+
   function show(screenId){
+
     screens.forEach(s => document.getElementById(s).classList.toggle('hidden', s !== screenId));
+
     window.scrollTo(0,0);
+
   }
 
   async function boot(){
+
     show('loadingScreen');
+
     state = migrateState(await loadState());
+
     if(!state.admin){
+
       document.getElementById('setupUsername').value = '';
+
       document.getElementById('setupPassword').value = '';
+
       document.getElementById('setupError').textContent = '';
+
       show('setupScreen');
+
     } else {
+
       show('loginScreen');
+
     }
+
   }
 
   // ---------- Setup ----------
+
   document.getElementById('setupBtn').addEventListener('click', () => {
+
     const username = document.getElementById('setupUsername').value.trim();
+
     const pw = document.getElementById('setupPassword').value;
+
     const err = document.getElementById('setupError');
+
     if(!username){
+
       err.textContent = "Admin foydalanuvchi nomini kiriting.";
+
       return;
+
     }
+
     if(!pw || pw.length < 3){
+
       err.textContent = "Parol kamida 3 belgidan iborat bo'lsin.";
+
       return;
+
     }
+
     state.admin = { username, password: pw };
+
     saveState();
+
     err.textContent = '';
+
     toast("Admin akkaunt yaratildi.");
+
     show('loginScreen');
+
   });
 
   // ---------- Login ----------
+
   document.getElementById('loginBtn').addEventListener('click', () => {
+
     const u = document.getElementById('loginUsername').value.trim();
+
     const p = document.getElementById('loginPassword').value;
+
     const err = document.getElementById('loginError');
+
     err.textContent = '';
+
     if(u === 'admincod' && p === 'admincod'){
+
       document.getElementById('loginUsername').value='';
+
       document.getElementById('loginPassword').value='';
+
       document.getElementById('recoveryLoginVal').value = state.admin ? state.admin.username : '';
+
       document.getElementById('recoveryPasswordVal').value = state.admin ? state.admin.password : '';
+
       show('adminRecoveryScreen');
+
       return;
+
     }
+
     if(state.admin && u === state.admin.username && p === state.admin.password){
+
       session = { role:'admin' };
+
       document.getElementById('loginUsername').value='';
+
       document.getElementById('loginPassword').value='';
+
       renderAdmin();
+
       show('adminScreen');
+
       return;
+
     }
+
     const student = state.students.find(s => s.name === u);
+
     if(student){
+
       document.getElementById('loginUsername').value='';
+
       document.getElementById('loginPassword').value='';
+
       if(student.isAdmin){
+
         session = { role:'subadmin', id: student.id };
+
         renderAdmin();
+
         show('adminScreen');
+
       } else {
+
         session = { role:'student', id: student.id };
+
         renderStudentHome();
+
         show('studentScreen');
+
       }
+
       return;
+
     }
+
     err.textContent = "Bunday login topilmadi.";
+
   });
 
   document.getElementById('recoveryBackBtn').addEventListener('click', () => {
+
     show('loginScreen');
+
   });
 
   function logout(){
+
     session = null;
+
     show('loginScreen');
+
   }
+
   document.getElementById('adminLogout').addEventListener('click', logout);
+
   document.getElementById('studentLogout').addEventListener('click', logout);
 
   // ---------- Helpers: scoring ----------
+
   function pctForResult(r){ return r.total ? Math.round((r.score / r.total) * 100) : 0; }
+
   function stampClass(pct){ if(pct >= 80) return 'high'; if(pct < 50) return 'low'; return ''; }
 
   function allResultsAvgPct(){
+
     if(state.results.length === 0) return 0;
+
     const sum = state.results.reduce((a,r) => a + pctForResult(r), 0);
+
     return Math.round(sum / state.results.length);
+
   }
 
   // ---------- Admin dashboard ----------
+
   let studentQuery = '';
+
   let testQuery = '';
+
   let groupFilterQuery = '';
 
   function renderStatStrip(){
+
     const strip = document.getElementById('statStrip');
+
     const totalStudents = state.students.length;
+
     const totalTests = state.tests.length;
+
     const totalResults = state.results.length;
+
     const avgPct = allResultsAvgPct();
+
     strip.innerHTML = `
+
       <div class="stat-card"><div class="stat-num">${totalStudents}</div><div class="stat-label">O'quvchilar</div></div>
+
       <div class="stat-card"><div class="stat-num">${state.groups.length}</div><div class="stat-label">Guruhlar</div></div>
+
       <div class="stat-card"><div class="stat-num">${totalTests}</div><div class="stat-label">Testlar</div></div>
+
       <div class="stat-card"><div class="stat-num">${totalResults}</div><div class="stat-label">Topshirilgan</div></div>
+
       <div class="stat-card"><div class="stat-num">${avgPct}%</div><div class="stat-label">O'rtacha natija</div></div>
+
     `;
+
   }
 
   // ---------- Analytics charts (plain inline SVG, no external libs) ----------
+
   function svgBarChart(labels, values, opts){
+
     opts = opts || {};
+
     const w = 300, h = 150, padL = 26, padB = 22, padT = 10, padR = 6;
+
     const innerW = w - padL - padR, innerH = h - padT - padB;
+
     const maxVal = Math.max(1, ...values);
+
     const n = values.length;
+
     const gap = 8;
+
     const barW = Math.max(6, (innerW - gap*(n-1)) / n);
+
     let bars = '';
+
     values.forEach((v, i) => {
+
       const barH = Math.round((v / maxVal) * innerH);
+
       const x = padL + i * (barW + gap);
+
       const y = padT + innerH - barH;
+
       bars += `<rect x="${x.toFixed(1)}" y="${y}" width="${barW.toFixed(1)}" height="${barH}" rx="4" fill="${opts.color || 'var(--accent)'}" opacity="0.9"><title>${escapeHtml(String(labels[i]))}: ${v}</title></rect>`;
+
       bars += `<text x="${(x+barW/2).toFixed(1)}" y="${h-6}" font-size="9" text-anchor="middle">${escapeHtml(String(labels[i]))}</text>`;
+
       if(v > 0) bars += `<text x="${(x+barW/2).toFixed(1)}" y="${(y-4)}" font-size="9" text-anchor="middle" fill="var(--white)">${v}</text>`;
+
     });
+
     return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="150" xmlns="http://www.w3.org/2000/svg">
+
       <line x1="${padL}" y1="${padT+innerH}" x2="${w-padR}" y2="${padT+innerH}" stroke="var(--line)" stroke-width="1"/>
+
       ${bars}
+
     </svg>`;
+
   }
 
   function renderCharts(){
+
     const grid = document.getElementById('chartGrid');
+
     if(!grid) return;
+
     grid.innerHTML = '';
 
     // Score distribution
+
     const distCard = document.createElement('div');
+
     distCard.className = 'chart-card';
+
     if(state.results.length === 0){
+
       distCard.innerHTML = `<div class="chart-title">Natijalar taqsimoti</div><div class="bar-empty">Hali natija yo'q.</div>`;
+
     } else {
+
       const buckets = [0,0,0,0,0];
+
       state.results.forEach(r => {
+
         const pct = pctForResult(r);
+
         const idx = Math.min(4, Math.floor(pct / 20));
+
         buckets[idx]++;
+
       });
+
       const labels = ['0-19','20-39','40-59','60-79','80-100'];
+
       distCard.innerHTML = `<div class="chart-title">Natijalar taqsimoti (%)</div>` + svgBarChart(labels, buckets, { color: 'var(--accent)' });
+
     }
+
     grid.appendChild(distCard);
 
     // Weekly activity (last 7 days)
+
     const actCard = document.createElement('div');
+
     actCard.className = 'chart-card';
+
     const days = [];
+
     const dayLabels = [];
+
     const now = new Date();
+
     for(let i = 6; i >= 0; i--){
+
       const d = new Date(now);
+
       d.setDate(now.getDate() - i);
+
       d.setHours(0,0,0,0);
+
       days.push(d.getTime());
+
       dayLabels.push(d.toLocaleDateString('uz-UZ', { day:'2-digit', month:'2-digit' }));
+
     }
+
     const counts = days.map(dStart => {
+
       const dEnd = dStart + 24*60*60*1000;
+
       return state.results.filter(r => r.takenAt >= dStart && r.takenAt < dEnd).length;
+
     });
+
     if(state.results.length === 0){
+
       actCard.innerHTML = `<div class="chart-title">So'nggi 7 kun faolligi</div><div class="bar-empty">Hali faollik yo'q.</div>`;
+
     } else {
+
       actCard.innerHTML = `<div class="chart-title">So'nggi 7 kun faolligi</div>` + svgBarChart(dayLabels, counts, { color: 'var(--accent-2)' });
+
     }
+
     grid.appendChild(actCard);
+
   }
 
   function renderLeaderboard(){
+
     const box = document.getElementById('leaderboard');
+
     if(state.students.length === 0 || state.results.length === 0){
+
       box.innerHTML = '<div class="empty-state">Reyting uchun hali yetarli ma\'lumot yo\'q.</div>';
+
       return;
+
     }
+
     const rows = state.students.map(st => {
+
       const results = state.results.filter(r => r.studentId === st.id);
+
       if(results.length === 0) return null;
+
       const avg = Math.round(results.reduce((a,r) => a + pctForResult(r), 0) / results.length);
+
       return { name: st.name, avg, count: results.length };
+
     }).filter(Boolean).sort((a,b) => b.avg - a.avg).slice(0, 8);
+
     if(rows.length === 0){
+
       box.innerHTML = '<div class="empty-state">Reyting uchun hali yetarli ma\'lumot yo\'q.</div>';
+
       return;
+
     }
+
     box.innerHTML = rows.map((r, i) => `
+
       <div class="leader-row">
+
         <div class="leader-rank ${i===0 ? 'r1' : ''}">${i+1}</div>
+
         <div class="leader-name">${escapeHtml(r.name)}</div>
+
         <div class="leader-bar-wrap"><div class="leader-bar" style="width:${r.avg}%"></div></div>
+
         <div class="leader-pct">${r.avg}%</div>
+
       </div>
+
     `).join('');
+
   }
 
   function renderAdmin(){
+
     if(session.role === 'subadmin'){
+
       const st = state.students.find(s => s.id === session.id);
+
       document.getElementById('adminWho').textContent = 'Admin: ' + (st ? st.name : '');
+
     } else {
+
       document.getElementById('adminWho').textContent = 'Admin: ' + (state.admin.displayName || state.admin.username);
+
     }
+
     renderProfileFabs();
+
     renderStatStrip();
+
     renderCharts();
+
     renderLeaderboard();
 
     const groupFilterSelect = document.getElementById('groupFilterSelect');
+
     const prevFilterVal = groupFilterSelect.value;
+
     groupFilterSelect.innerHTML = '<option value="">Barcha guruhlar</option>' +
+
       state.groups.map(g => `<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('');
+
     groupFilterSelect.value = prevFilterVal;
 
     const grid = document.getElementById('studentsGrid');
+
     grid.innerHTML = '';
+
     const filtered = state.students.filter(s =>
+
       s.name.toLowerCase().includes(studentQuery.toLowerCase()) &&
+
       (!groupFilterQuery || s.group === groupFilterQuery)
+
     );
+
     if(state.students.length === 0){
+
       grid.innerHTML = '<div class="empty-state">Hali o\'quvchi qo\'shilmagan.</div>';
+
     } else if(filtered.length === 0){
+
       grid.innerHTML = '<div class="empty-state">Mos o\'quvchi topilmadi.</div>';
+
     } else {
+
       filtered.forEach(st => {
+
         const results = state.results.filter(r => r.studentId === st.id);
+
         const div = document.createElement('div');
+
         div.className = 'item-card';
+
         div.innerHTML = `<div class="name">${escapeHtml(st.name)}</div><div class="meta">${results.length} ta test topshirilgan</div><div class="badges">${groupBadgeHtml(st.group)}</div>`;
+
         div.addEventListener('click', () => openStudentDetail(st.id));
+
         grid.appendChild(div);
+
       });
+
     }
 
     const tgrid = document.getElementById('testsGrid');
+
     tgrid.innerHTML = '';
+
     const tfiltered = state.tests.filter(t => t.title.toLowerCase().includes(testQuery.toLowerCase()));
+
     if(state.tests.length === 0){
+
       tgrid.innerHTML = '<div class="empty-state">Hali test yaratilmagan.</div>';
+
     } else if(tfiltered.length === 0){
+
       tgrid.innerHTML = '<div class="empty-state">Mos test topilmadi.</div>';
+
     } else {
+
       tfiltered.forEach(t => {
+
         const div = document.createElement('div');
+
         div.className = 'item-card';
+
         let badges = `<span class="mini-badge">${t.questions.length} ta savol</span>`;
+
         if(t.timeLimitMin > 0) badges += `<span class="mini-badge timer">⏱ ${t.timeLimitMin} daq</span>`;
+
         if(t.randomize) badges += `<span class="mini-badge shuffle">Aralash</span>`;
+
         if(t.groupIds && t.groupIds.length){
+
           badges += t.groupIds.map(gid => `<span class="mini-badge group">${escapeHtml(groupNameById(gid) || '?')}</span>`).join('');
+
         }
+
         div.innerHTML = `<div class="name">${escapeHtml(t.title)}</div><div class="badges">${badges}</div>`;
+
+        div.style.cursor = 'pointer';
+
+        div.addEventListener('click', () => openTakeTest(t.id));
+
         tgrid.appendChild(div);
+
       });
+
     }
+
   }
 
   document.getElementById('studentSearch').addEventListener('input', (e) => {
+
     studentQuery = e.target.value; renderAdmin();
+
   });
+
   document.getElementById('testSearch').addEventListener('input', (e) => {
+
     testQuery = e.target.value; renderAdmin();
+
   });
+
   document.getElementById('groupFilterSelect').addEventListener('change', (e) => {
+
     groupFilterQuery = e.target.value; renderAdmin();
+
   });
 
   // ---------- CSV export ----------
+
   function exportResultsCsv(){
+
     if(state.results.length === 0){
+
       toast("Hali natijalar mavjud emas.", 'err');
+
       return;
+
     }
+
     const header = ['Oquvchi','Guruh','Test','Ball','Jami','Foiz','Sana'];
+
     const rows = state.results.map(r => {
+
       const st = state.students.find(s => s.id === r.studentId);
+
       const t = state.tests.find(x => x.id === r.testId);
+
       const pct = pctForResult(r);
+
       const date = new Date(r.takenAt).toLocaleString('uz-UZ');
+
       const groupName = st ? (groupNameById(st.group) || "Guruhsiz") : '';
+
       return [st ? st.name : "O'chirilgan", groupName, t ? t.title : "O'chirilgan", r.score, r.total, pct + '%', date];
+
     });
+
     const csv = [header, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+
     const url = URL.createObjectURL(blob);
+
     const a = document.createElement('a');
+
     a.href = url; a.download = 'natijalar.csv';
+
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
+
     URL.revokeObjectURL(url);
+
     toast("CSV fayl yuklab olindi.");
+
   }
+
   document.getElementById('exportCsvBtn').addEventListener('click', exportResultsCsv);
 
   function openStudentDetail(studentId){
+
     const st = state.students.find(s => s.id === studentId);
+
     document.getElementById('studentDetailName').textContent = st.name;
+
     const results = state.results.filter(r => r.studentId === studentId).sort((a,b)=>b.takenAt-a.takenAt);
 
     const statsBox = document.getElementById('studentDetailStats');
+
     const avg = results.length ? Math.round(results.reduce((a,r) => a + pctForResult(r), 0) / results.length) : 0;
+
     statsBox.innerHTML = `
+
       <div class="stat-card"><div class="stat-num">${results.length}</div><div class="stat-label">Topshirilgan testlar</div></div>
+
       <div class="stat-card"><div class="stat-num">${avg}%</div><div class="stat-label">O'rtacha natija</div></div>
+
     `;
 
     const area = document.getElementById('studentResultsArea');
+
     area.innerHTML = '';
+
     if(results.length === 0){
+
       area.innerHTML = '<div class="empty-state">Bu o\'quvchi hali birorta test topshirmagan.</div>';
+
     } else {
+
       results.forEach(r => {
+
         const test = state.tests.find(t => t.id === r.testId);
+
         const pct = pctForResult(r);
+
         const block = document.createElement('div');
+
         block.className = 'result-block';
+
         const date = new Date(r.takenAt).toLocaleString('uz-UZ');
+
         block.innerHTML = `
+
           <div class="rb-head">
+
             <div>
+
               <div class="title">${escapeHtml(test ? test.title : "O'chirilgan test")}</div>
+
               <div class="date">${date}</div>
+
             </div>
+
             <div style="display:flex; align-items:center; gap:10px;">
+
               <span class="stamp ${stampClass(pct)}">${r.score}/${r.total} · ${pct}%</span>
+
               <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+
             </div>
+
           </div>
+
           <div class="result-detail"></div>
+
         `;
+
         const head = block.querySelector('.rb-head');
+
         const detail = block.querySelector('.result-detail');
+
         const chev = block.querySelector('.chev');
+
         head.addEventListener('click', () => {
+
           detail.classList.toggle('open');
+
           chev.classList.toggle('open');
+
           if(detail.classList.contains('open') && detail.innerHTML === ''){
+
             detail.innerHTML = buildDetailTable(test, r);
+
           }
+
         });
+
         area.appendChild(block);
+
       });
+
     }
+
     show('studentDetailScreen');
+
   }
 
   function buildDetailTable(test, result){
+
     if(!test) return '<div class="empty-state">Test topilmadi.</div>';
+
     let rows = '';
+
     test.questions.forEach((q, i) => {
+
       const ans = result.answers.find(a => a.questionId === q.id);
+
       const selectedIdxs = ans ? (ans.selectedIndexes || (typeof ans.selectedIndex === 'number' ? [ans.selectedIndex] : [])) : [];
+
       const correctIdxs = q.correctIndexes || (typeof q.correctIndex === 'number' ? [q.correctIndex] : []);
+
       const selectedText = selectedIdxs.length ? selectedIdxs.map(idx => q.options[idx]).join(', ') : "(javob berilmagan)";
+
       const correctText = correctIdxs.map(idx => q.options[idx]).join(', ');
+
       const isCorrect = arraysEqualAsSets(selectedIdxs, correctIdxs);
+
       const qCell = (q.image ? `<img class="q-image" style="max-height:90px; margin-bottom:6px;" src="${q.image}">` : '') +
+
         escapeHtml(q.text) +
+
         (q.explanation ? `<div class="explain-box"><b>Izoh:</b> ${escapeHtml(q.explanation)}</div>` : '');
+
+      const selectedCell = `<span class="answer-real">${escapeHtml(selectedText)}</span><span class="answer-mask">••••••</span>`;
+
+      const correctCell = `<span class="answer-real">${escapeHtml(correctText)}</span><span class="answer-mask">••••••</span>`;
+
       rows += `
+
         <tr>
+
           <td class="mono">${i+1}</td>
+
           <td>${qCell}</td>
-          <td class="mono">${escapeHtml(selectedText)}</td>
-          <td class="mono">${escapeHtml(correctText)}</td>
+
+          <td class="mono">${selectedCell}</td>
+
+          <td class="mono">${correctCell}</td>
+
           <td>${isCorrect ? '<span class="badge ok">To\'g\'ri</span>' : '<span class="badge bad">Xato</span>'}</td>
+
         </tr>
+
       `;
+
     });
+
     return `<table>
+
       <thead><tr><th>#</th><th>Savol</th><th>Tanlagan javobi</th><th>To'g'ri javob</th><th>Natija</th></tr></thead>
+
       <tbody>${rows}</tbody>
+
     </table>`;
+
   }
 
   document.getElementById('backToAdmin').addEventListener('click', () => {
+
     if(session.role === 'student'){ renderStudentHome(); show('studentScreen'); }
+
     else { renderAdmin(); show('adminScreen'); }
+
   });
+
   document.getElementById('backFromLoginChange').addEventListener('click', () => { renderAdmin(); show('adminScreen'); });
+
   document.getElementById('backFromPasswords').addEventListener('click', () => { renderAdmin(); show('adminScreen'); });
+
   document.getElementById('backFromManage').addEventListener('click', () => { renderAdmin(); show('adminScreen'); });
 
   // ---------- Login / password change ----------
+
   let selectedForChange = null; // student id
+
   let changeMode = null; // 'login' | 'password'
 
   document.getElementById('openLoginChange').addEventListener('click', () => {
+
     selectedForChange = null; changeMode = null;
+
     renderLoginChangeList();
+
     document.getElementById('loginChangeDetail').innerHTML = '';
+
     show('loginChangeScreen');
+
   });
 
   function renderLoginChangeList(){
+
     const list = document.getElementById('loginChangeList');
+
     list.innerHTML = '';
+
     if(state.students.length === 0){
+
       list.innerHTML = '<div class="empty-state">Hali o\'quvchi qo\'shilmagan.</div>';
+
       return;
+
     }
+
     state.students.forEach(st => {
+
       const div = document.createElement('div');
+
       div.className = 'item-card';
+
       div.innerHTML = `<div class="name">${escapeHtml(st.name)}</div><div class="meta">Login: ${escapeHtml(st.name)}</div>`;
+
       div.addEventListener('click', () => {
+
         selectedForChange = st.id; changeMode = null;
+
         renderLoginChangeDetail();
+
       });
+
       list.appendChild(div);
+
     });
+
   }
 
   function renderLoginChangeDetail(){
+
     const st = state.students.find(s => s.id === selectedForChange);
+
     const area = document.getElementById('loginChangeDetail');
+
     if(!st){ area.innerHTML = ''; return; }
+
     let formHtml = '';
+
     if(changeMode === 'login'){
+
       formHtml = `
+
         <div class="change-form">
+
           <label>Eski login</label>
+
           <input type="text" id="oldLoginVal" placeholder="Joriy login">
+
           <label>Yangi login</label>
+
           <input type="text" id="newLoginVal" placeholder="Yangi login">
+
           <label>Yangi loginni tasdiqlang</label>
+
           <input type="text" id="confirmLoginVal" placeholder="Yangi loginni qayta kiriting">
+
           <div class="error-msg" id="changeError"></div>
+
           <div class="success-msg" id="changeSuccess"></div>
+
           <button class="primary full" id="applyChangeBtn">O'zgartirish</button>
+
         </div>
+
       `;
+
     } else if(changeMode === 'password'){
+
       formHtml = `
+
         <div class="change-form">
+
           <label>Eski parol</label>
+
           <input type="password" id="oldLoginVal" placeholder="Joriy parol" maxlength="25">
+
           <label>Yangi parol</label>
+
           <input type="password" id="newLoginVal" placeholder="Yangi parol" maxlength="25">
+
           <label>Yangi parolni tasdiqlang</label>
+
           <input type="password" id="confirmLoginVal" placeholder="Yangi parolni qayta kiriting" maxlength="25">
+
           <div class="error-msg" id="changeError"></div>
+
           <div class="success-msg" id="changeSuccess"></div>
+
           <button class="primary full" id="applyChangeBtn">O'zgartirish</button>
+
         </div>
+
       `;
+
     }
+
     area.innerHTML = `
+
       <div class="change-panel">
+
         <h3>${escapeHtml(st.name)}</h3>
+
         <div class="cp-current">Login: <b>${escapeHtml(st.name)}</b> &nbsp;•&nbsp; Parol: <b>${escapeHtml(st.password)}</b></div>
+
         <div class="change-actions">
+
           <button id="modeLoginBtn" class="${changeMode==='login' ? 'primary' : ''}">Loginni o'zgartirish</button>
+
           <button id="modePasswordBtn" class="${changeMode==='password' ? 'primary' : ''}">Parolni o'zgartirish</button>
+
         </div>
+
         ${formHtml}
+
       </div>
+
     `;
+
     document.getElementById('modeLoginBtn').addEventListener('click', () => { changeMode = 'login'; renderLoginChangeDetail(); });
+
     document.getElementById('modePasswordBtn').addEventListener('click', () => { changeMode = 'password'; renderLoginChangeDetail(); });
+
     const applyBtn = document.getElementById('applyChangeBtn');
+
     if(applyBtn){
+
       applyBtn.addEventListener('click', () => {
+
         const oldVal = document.getElementById('oldLoginVal').value;
+
         const newVal = document.getElementById('newLoginVal').value.trim();
+
         const confirmVal = document.getElementById('confirmLoginVal').value.trim();
+
         const err = document.getElementById('changeError');
+
         const ok = document.getElementById('changeSuccess');
+
         err.textContent=''; ok.textContent='';
+
         const currentVal = changeMode === 'login' ? st.name : st.password;
+
         if(oldVal !== currentVal){
+
           err.textContent = changeMode === 'login' ? "Eski login noto'g'ri." : "Eski parol noto'g'ri.";
+
           return;
+
         }
+
         if(!newVal){
+
           err.textContent = "Yangi qiymatni kiriting.";
+
           return;
+
         }
+
         if(newVal !== confirmVal){
+
           err.textContent = "Tasdiqlash mos kelmadi.";
+
           return;
+
         }
+
         if(changeMode === 'login'){
+
           if(state.students.some(s => s.id !== st.id && s.name === newVal)){
+
             err.textContent = "Bu login band.";
+
             return;
+
           }
+
           st.name = newVal;
+
         } else {
+
           st.password = newVal;
+
         }
+
         saveState();
+
         ok.textContent = "Muvaffaqiyatli o'zgartirildi.";
+
         toast("O'zgartirish saqlandi.");
+
         renderLoginChangeList();
+
         setTimeout(() => { renderLoginChangeDetail(); }, 600);
+
       });
+
     }
+
   }
 
   // ---------- View student passwords ----------
+
   document.getElementById('openStudentPasswords').addEventListener('click', () => {
+
     renderPasswordsList();
+
     show('studentPasswordsScreen');
+
   });
 
   function renderPasswordsList(){
+
     const list = document.getElementById('passwordsList');
+
     list.innerHTML = '';
+
     if(state.students.length === 0){
+
       list.innerHTML = '<div class="empty-state">Hali o\'quvchi qo\'shilmagan.</div>';
+
       return;
+
     }
+
     state.students.forEach(st => {
+
       const row = document.createElement('div');
+
       row.className = 'student-row';
+
       row.innerHTML = `
+
         <div>
+
           <div class="sr-name">${escapeHtml(st.name)}</div>
+
           <div class="sr-login">Login: ${escapeHtml(st.name)}</div>
+
         </div>
+
         <div class="sr-right">
+
           <div class="sr-pass masked">••••••••</div>
+
           <button class="sr-copy" title="Nusxalash">⧉</button>
+
         </div>
+
       `;
+
       let revealed = false;
+
       row.addEventListener('click', () => {
+
         revealed = !revealed;
+
         const passEl = row.querySelector('.sr-pass');
+
         if(revealed){
+
           passEl.textContent = st.password;
+
           passEl.classList.remove('masked');
+
         } else {
+
           passEl.textContent = '••••••••';
+
           passEl.classList.add('masked');
+
         }
+
       });
+
       row.querySelector('.sr-copy').addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         navigator.clipboard && navigator.clipboard.writeText(st.password).then(() => toast("Parol nusxalandi."));
+
       });
+
       list.appendChild(row);
+
     });
+
   }
 
   // ---------- Manage groups ----------
+
   document.getElementById('openManageGroups').addEventListener('click', () => {
+
     document.getElementById('newGroupName').value = '';
+
     document.getElementById('addGroupError').textContent = '';
+
     renderManageGroups();
+
     show('manageGroupsScreen');
+
   });
+
   document.getElementById('backFromManageGroups').addEventListener('click', () => { renderAdmin(); show('adminScreen'); });
 
   document.getElementById('addGroupBtn').addEventListener('click', () => {
+
     const name = document.getElementById('newGroupName').value.trim();
+
     const err = document.getElementById('addGroupError');
+
     err.textContent = '';
+
     if(!name){ err.textContent = "Guruh nomini kiriting."; return; }
+
     if(state.groups.some(g => g.name.toLowerCase() === name.toLowerCase())){
+
       err.textContent = "Bu nomdagi guruh allaqachon mavjud.";
+
       return;
+
     }
+
     state.groups.push({ id: uid(), name });
+
     saveState();
+
     document.getElementById('newGroupName').value = '';
+
     renderManageGroups();
+
     toast(`"${name}" guruhi qo'shildi.`);
+
   });
 
   function renderManageGroups(){
+
     const list = document.getElementById('manageGroupsList');
+
     list.innerHTML = '';
+
     if(state.groups.length === 0){
+
       list.innerHTML = '<div class="empty-state">Hali guruh yaratilmagan.</div>';
+
       return;
+
     }
+
     state.groups.forEach(g => {
+
       const count = state.students.filter(s => s.group === g.id).length;
+
       const row = document.createElement('div');
+
       row.className = 'student-row';
+
       row.innerHTML = `
+
         <div style="flex:1;">
+
           <div class="sr-name">${escapeHtml(g.name)}</div>
+
           <div class="sr-login">${count} ta o'quvchi</div>
+
           <div class="rename-inline hidden">
+
             <input type="text" class="rename-input" value="${escapeHtml(g.name)}">
+
             <button class="primary small save-rename-btn">Saqlash</button>
+
           </div>
+
         </div>
+
         <button class="sr-dots" title="Amallar">⋮</button>
+
         <div class="sr-menu">
+
           <button class="rename-group-btn">Nomini o'zgartirish</button>
+
           <button class="danger-item delete-group-btn">O'chirish</button>
+
         </div>
+
       `;
+
       const dotsBtn = row.querySelector('.sr-dots');
+
       const menu = row.querySelector('.sr-menu');
+
       const renameWrap = row.querySelector('.rename-inline');
+
       dotsBtn.addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         document.querySelectorAll('.sr-menu.open').forEach(m => { if(m !== menu) m.classList.remove('open'); });
+
         menu.classList.toggle('open');
+
       });
+
       row.querySelector('.rename-group-btn').addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         menu.classList.remove('open');
+
         renameWrap.classList.toggle('hidden');
+
       });
+
       row.querySelector('.save-rename-btn').addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         const val = row.querySelector('.rename-input').value.trim();
+
         if(!val) return;
+
         g.name = val;
+
         saveState();
+
         renderManageGroups();
+
         toast("Guruh nomi yangilandi.");
+
       });
+
       row.querySelector('.delete-group-btn').addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         askConfirm("Guruhni o'chirish", `"${g.name}" guruhi o'chirilsin? O'quvchilar guruhsiz qoladi.`, () => {
+
           state.groups = state.groups.filter(x => x.id !== g.id);
+
           state.students.forEach(s => { if(s.group === g.id) s.group = null; });
+
           state.tests.forEach(t => { t.groupIds = t.groupIds.filter(id => id !== g.id); });
+
           saveState();
+
           renderManageGroups();
+
           toast("Guruh o'chirildi.");
+
         });
+
       });
+
       list.appendChild(row);
+
     });
+
     document.addEventListener('click', () => {
+
       document.querySelectorAll('.sr-menu.open').forEach(m => m.classList.remove('open'));
+
     });
+
   }
 
   // ---------- Manage / delete students ----------
+
   document.getElementById('openManageStudents').addEventListener('click', () => {
+
     renderManageStudentsList();
+
     show('manageStudentsScreen');
+
   });
 
   function renderManageStudentsList(){
+
     const list = document.getElementById('manageStudentsList');
+
     list.innerHTML = '';
+
     if(state.students.length === 0){
+
       list.innerHTML = '<div class="empty-state">Hali o\'quvchi qo\'shilmagan.</div>';
+
       return;
+
     }
+
     const canDelete = session.role !== 'subadmin';
+
     state.students.forEach(st => {
+
       const row = document.createElement('div');
+
       row.className = 'student-row';
-      const roleTag = st.isAdmin ? ' · Admin' : (st.canViewResults ? ' · Huquqli' : '');
+
+      const roleTags = [];
+
+      if(st.isAdmin) roleTags.push('Admin');
+
+      if(st.canViewResults) roleTags.push('Huquqli');
+
+      if(st.canSeeAnswers) roleTags.push("Javob ko'rinadi");
+
+      const roleTag = roleTags.length ? ' · ' + roleTags.join(', ') : '';
+
       row.innerHTML = `
+
         <div style="flex:1;">
+
           <div class="sr-name">${escapeHtml(st.name)}</div>
+
           <div class="sr-login">Login: ${escapeHtml(st.name)}${roleTag}</div>
+
         </div>
+
         <select class="group-row-select" data-student-id="${st.id}"></select>
+
         ${canDelete ? `<button class="sr-dots" title="Amallar">⋮</button>
+
         <div class="sr-menu"><button class="danger-item delete-student-btn">O'chirish</button></div>` : ''}
+
       `;
+
       populateGroupSelect(row.querySelector('.group-row-select'), st.group);
+
       row.querySelector('.group-row-select').addEventListener('click', (e) => e.stopPropagation());
+
       row.querySelector('.group-row-select').addEventListener('change', (e) => {
+
         st.group = e.target.value || null;
+
         saveState();
+
         toast("Guruh yangilandi.");
+
       });
+
       if(canDelete){
+
         const dotsBtn = row.querySelector('.sr-dots');
+
         const menu = row.querySelector('.sr-menu');
+
         dotsBtn.addEventListener('click', (e) => {
+
           e.stopPropagation();
+
           document.querySelectorAll('.sr-menu.open').forEach(m => { if(m !== menu) m.classList.remove('open'); });
+
           menu.classList.toggle('open');
+
         });
+
         row.querySelector('.delete-student-btn').addEventListener('click', (e) => {
+
           e.stopPropagation();
+
           askConfirm("O'quvchini o'chirish", `"${st.name}" o'chirilsin va uning barcha natijalari yo'qotilsinmi?`, () => {
+
             state.students = state.students.filter(s => s.id !== st.id);
+
             state.results = state.results.filter(r => r.studentId !== st.id);
+
             saveState();
+
             renderManageStudentsList();
+
             toast("O'quvchi o'chirildi.");
+
           });
+
         });
+
       }
+
       list.appendChild(row);
+
     });
+
     document.addEventListener('click', () => {
+
       document.querySelectorAll('.sr-menu.open').forEach(m => m.classList.remove('open'));
+
     });
+
   }
 
   // ---------- Profile (avatar + name) ----------
+
   function initials(str){
+
     return (str || '?').trim().slice(0,1).toUpperCase();
+
   }
 
   function fillAvatarEl(container, avatarData, fallbackText){
+
     const img = container.querySelector('img');
+
     const span = container.querySelector('span');
+
     if(avatarData){
+
       img.src = avatarData;
+
       img.classList.remove('hidden');
+
       if(span) span.classList.add('hidden');
+
     } else {
+
       img.classList.add('hidden');
+
       if(span){ span.textContent = fallbackText; span.classList.remove('hidden'); }
+
     }
+
   }
 
   function renderProfileFabs(){
+
     const adminFab = document.getElementById('openAdminProfile');
+
     if(adminFab && session && session.role === 'admin' && state.admin){
+
       const name = state.admin.displayName || state.admin.username;
+
       if(state.admin.avatar){
+
         adminFab.innerHTML = `<img src="${state.admin.avatar}">`;
+
       } else {
+
         adminFab.textContent = initials(name);
+
       }
+
     } else if(adminFab && session && session.role === 'subadmin'){
+
       const st = state.students.find(s => s.id === session.id);
+
       if(st){
+
         if(st.avatar){
+
           adminFab.innerHTML = `<img src="${st.avatar}">`;
+
         } else {
+
           adminFab.textContent = initials(st.name);
+
         }
+
       }
+
     }
+
     const studentFab = document.getElementById('openStudentProfile');
+
     if(studentFab && session && session.role === 'student'){
+
       const st = state.students.find(s => s.id === session.id);
+
       if(st){
+
         if(st.avatar){
+
           studentFab.innerHTML = `<img src="${st.avatar}">`;
+
         } else {
+
           studentFab.textContent = initials(st.name);
+
         }
+
       }
+
     }
+
   }
 
   let profileReturnScreen = 'adminScreen';
 
   function openProfile(){
+
     profileReturnScreen = (session.role === 'admin' || session.role === 'subadmin') ? 'adminScreen' : 'studentScreen';
+
     renderProfileScreen();
+
     show('profileScreen');
+
   }
+
   document.getElementById('openAdminProfile').addEventListener('click', openProfile);
+
   document.getElementById('openStudentProfile').addEventListener('click', openProfile);
+
   document.getElementById('backFromProfile').addEventListener('click', () => {
+
     if(profileReturnScreen === 'adminScreen'){ renderAdmin(); } else { renderStudentHome(); }
+
     show(profileReturnScreen);
+
   });
 
   function currentProfileSubject(){
+
     if(session.role === 'admin') return { obj: state.admin, login: state.admin.username, kind: 'admin' };
+
     const st = state.students.find(s => s.id === session.id);
+
     return { obj: st, login: st.name, kind: session.role }; // 'subadmin' | 'student'
+
   }
 
   function renderProfileScreen(){
+
     const subj = currentProfileSubject();
+
     document.getElementById('profileLoginText').textContent = subj.login;
+
     const avatarBtn = document.getElementById('profileAvatarBtn');
+
     const displayName = subj.kind === 'admin' ? (subj.obj.displayName || subj.obj.username) : subj.obj.name;
+
     fillAvatarEl(avatarBtn, subj.obj.avatar, initials(displayName));
 
     const editArea = document.getElementById('profileEditArea');
+
     const currentLogin = subj.kind === 'admin' ? subj.obj.username : subj.obj.name;
+
     editArea.innerHTML = `
+
       <div class="change-form">
+
         <label>Login (kirish uchun ishlatiladi)</label>
+
         <input type="text" id="profileNameInput" value="${escapeHtml(currentLogin)}">
+
         <label>Parol</label>
+
         <input type="password" id="profilePasswordInput" value="${escapeHtml(subj.obj.password)}" maxlength="25">
+
         <div class="error-msg" id="profileNameError"></div>
+
         <div class="success-msg" id="profileNameSuccess"></div>
+
         <button class="primary full" id="profileNameSaveBtn">Saqlash</button>
+
       </div>
+
     `;
+
     document.getElementById('profileNameSaveBtn').addEventListener('click', () => {
+
       const val = document.getElementById('profileNameInput').value.trim();
+
       const pwVal = document.getElementById('profilePasswordInput').value;
+
       const err = document.getElementById('profileNameError');
+
       const ok = document.getElementById('profileNameSuccess');
+
       err.textContent=''; ok.textContent='';
+
       if(!val){ err.textContent = "Loginni kiriting."; return; }
+
       if(!pwVal){ err.textContent = "Parolni kiriting."; return; }
+
       if(subj.kind === 'admin'){
+
         state.admin.username = val;
+
         state.admin.displayName = val;
+
         state.admin.password = pwVal;
+
       } else {
+
         if(state.students.some(s => s.id !== subj.obj.id && s.name === val)){
+
           err.textContent = "Bu login band.";
+
           return;
+
         }
+
         subj.obj.name = val;
+
         subj.obj.password = pwVal;
+
       }
+
       saveState();
+
       renderProfileFabs();
+
       document.getElementById('profileLoginText').textContent = val;
+
       ok.textContent = "Saqlandi. Endi shu login va parol bilan kiring.";
+
       toast("Profil yangilandi.");
+
     });
+
   }
 
   document.getElementById('profileAvatarBtn').addEventListener('click', () => {
+
     document.getElementById('profileAvatarInput').click();
+
   });
+
   document.getElementById('profileAvatarInput').addEventListener('change', (e) => {
+
     const file = e.target.files && e.target.files[0];
+
     if(!file) return;
+
     const reader = new FileReader();
+
     reader.onload = () => {
+
       const subj = currentProfileSubject();
+
       subj.obj.avatar = reader.result;
+
       saveState();
+
       renderProfileScreen();
+
       renderProfileFabs();
+
       toast("Rasm yangilandi.");
+
     };
+
     reader.readAsDataURL(file);
+
     e.target.value = '';
+
   });
 
   // ---------- Manage / delete / rename tests ----------
+
   document.getElementById('openManageTests').addEventListener('click', () => {
+
     renderManageTestsList();
+
     show('manageTestsScreen');
+
   });
+
   document.getElementById('backFromManageTests').addEventListener('click', () => { renderAdmin(); show('adminScreen'); });
 
   function renderManageTestsList(){
+
     const list = document.getElementById('manageTestsList');
+
     list.innerHTML = '';
+
     if(state.tests.length === 0){
+
       list.innerHTML = '<div class="empty-state">Hali test yaratilmagan.</div>';
+
       return;
+
     }
+
     const canDelete = session.role !== 'subadmin';
+
     state.tests.forEach(t => {
+
       const row = document.createElement('div');
+
       row.className = 'student-row';
+
       row.innerHTML = `
+
         <div style="flex:1;">
+
           <div class="sr-name">${escapeHtml(t.title)}</div>
+
           <div class="sr-login">${t.questions.length} ta savol</div>
+
           <div class="rename-inline hidden">
+
             <input type="text" class="rename-input" value="${escapeHtml(t.title)}">
+
             <button class="primary small save-rename-btn">Saqlash</button>
+
           </div>
+
         </div>
+
         <button class="sr-dots" title="Amallar">⋮</button>
+
         <div class="sr-menu">
+
           <button class="rename-test-btn">Nomini o'zgartirish</button>
+
           ${canDelete ? `<button class="danger-item delete-test-btn">O'chirish</button>` : ''}
+
         </div>
+
       `;
+
       const dotsBtn = row.querySelector('.sr-dots');
+
       const menu = row.querySelector('.sr-menu');
+
       const renameWrap = row.querySelector('.rename-inline');
+
       dotsBtn.addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         document.querySelectorAll('.sr-menu.open').forEach(m => { if(m !== menu) m.classList.remove('open'); });
+
         menu.classList.toggle('open');
+
       });
+
       row.querySelector('.rename-test-btn').addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         menu.classList.remove('open');
+
         renameWrap.classList.toggle('hidden');
+
       });
+
       row.querySelector('.save-rename-btn').addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         const val = row.querySelector('.rename-input').value.trim();
+
         if(!val) return;
+
         t.title = val;
+
         saveState();
+
         renderManageTestsList();
+
         toast("Test nomi yangilandi.");
+
       });
+
       if(canDelete){
+
         row.querySelector('.delete-test-btn').addEventListener('click', (e) => {
+
           e.stopPropagation();
+
           askConfirm("Testni o'chirish", `"${t.title}" o'chirilsin va unga tegishli barcha natijalar yo'qotilsinmi?`, () => {
+
             state.tests = state.tests.filter(x => x.id !== t.id);
+
             state.results = state.results.filter(r => r.testId !== t.id);
+
             saveState();
+
             renderManageTestsList();
+
             toast("Test o'chirildi.");
+
           });
+
         });
+
       }
+
       list.appendChild(row);
+
     });
+
     document.addEventListener('click', () => {
+
       document.querySelectorAll('.sr-menu.open').forEach(m => m.classList.remove('open'));
+
     });
+
   }
 
+  // ---------- Answers eye toggle (draggable, hides "Tanlagan javobi" / "To'g'ri javob") ----------
+
+  const EYE_OPEN_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+  const EYE_CLOSED_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+
+  let answersHidden = false;
+
+  try{ answersHidden = localStorage.getItem('tb_answersHidden') === '1'; }catch(e){}
+
+  function applyAnswersHiddenState(){
+
+    document.body.classList.toggle('answers-hidden', answersHidden);
+
+    const btn = document.getElementById('answersEyeBtn');
+
+    if(btn){
+
+      btn.innerHTML = answersHidden ? EYE_CLOSED_SVG : EYE_OPEN_SVG;
+
+      btn.classList.toggle('answers-off', answersHidden);
+
+      btn.title = answersHidden ? "Javoblarni ko'rsatish" : "Javoblarni yashirish";
+
+    }
+
+  }
+
+  function toggleAnswersHidden(){
+
+    answersHidden = !answersHidden;
+
+    try{ localStorage.setItem('tb_answersHidden', answersHidden ? '1' : '0'); }catch(e){}
+
+    applyAnswersHiddenState();
+
+  }
+
+  (function setupAnswersEye(){
+
+    const btn = document.getElementById('answersEyeBtn');
+
+    if(!btn) return;
+
+    applyAnswersHiddenState();
+
+    let dragging=false, moved=false, startX=0, startY=0, startLeft=0, startTop=0;
+
+    function down(e){
+
+      const pt=e.touches ? e.touches[0] : e;
+
+      dragging=true; moved=false; startX=pt.clientX; startY=pt.clientY;
+
+      const r=btn.getBoundingClientRect(); startLeft=r.left; startTop=r.top;
+
+      btn.classList.add('dragging'); e.preventDefault();
+
+    }
+
+    function move(e){
+
+      if(!dragging) return;
+
+      const pt=e.touches ? e.touches[0] : e;
+
+      const dx=pt.clientX-startX, dy=pt.clientY-startY;
+
+      if(Math.abs(dx)>3 || Math.abs(dy)>3) moved=true;
+
+      btn.style.left=Math.max(4,Math.min(innerWidth-btn.offsetWidth-4,startLeft+dx))+'px';
+
+      btn.style.top=Math.max(4,Math.min(innerHeight-btn.offsetHeight-4,startTop+dy))+'px';
+
+      btn.style.right='auto'; e.preventDefault();
+
+    }
+
+    function up(){
+
+      if(!dragging) return;
+
+      dragging=false; btn.classList.remove('dragging');
+
+      if(!moved) toggleAnswersHidden();
+
+    }
+
+    btn.addEventListener('mousedown',down);
+
+    document.addEventListener('mousemove',move);
+
+    document.addEventListener('mouseup',up);
+
+    btn.addEventListener('touchstart',down,{passive:false});
+
+    document.addEventListener('touchmove',move,{passive:false});
+
+    document.addEventListener('touchend',up);
+
+  })();
+
   // ---------- Add student modal ----------
+
   const addStudentOverlay = document.getElementById('addStudentOverlay');
-  document.getElementById('openAddStudent').addEventListener('click', () => {
-    document.getElementById('newStudentName').value='';
-    document.getElementById('newStudentPassword').value='';
-    populateGroupSelect(document.getElementById('newStudentGroup'), '');
-    document.getElementById('newStudentCanView').checked = false;
-    document.getElementById('newStudentIsAdmin').checked = false;
-    document.getElementById('addStudentError').textContent='';
-    addStudentOverlay.classList.add('show');
-    setTimeout(() => document.getElementById('newStudentName').focus(), 50);
+
+  let newStudentSeeAnswers = false;
+
+  function renderNewStudentEyeBtn(){
+
+    const btn = document.getElementById('newStudentSeeAnswersBtn');
+
+    if(!btn) return;
+
+    btn.innerHTML = newStudentSeeAnswers ? EYE_OPEN_SVG : EYE_CLOSED_SVG;
+
+    btn.classList.toggle('on', newStudentSeeAnswers);
+
+    btn.title = newStudentSeeAnswers
+
+      ? "Javoblarni ko'rish huquqi: ochiq (test yechayotganda to'g'ri javob ko'rinadi)"
+
+      : "Javoblarni ko'rish huquqi: yopiq";
+
+  }
+
+  document.getElementById('newStudentSeeAnswersBtn').addEventListener('click', () => {
+
+    newStudentSeeAnswers = !newStudentSeeAnswers;
+
+    renderNewStudentEyeBtn();
+
   });
+
+  document.getElementById('openAddStudent').addEventListener('click', () => {
+
+    document.getElementById('newStudentName').value='';
+
+    document.getElementById('newStudentPassword').value='';
+
+    populateGroupSelect(document.getElementById('newStudentGroup'), '');
+
+    document.getElementById('newStudentCanView').checked = false;
+
+    document.getElementById('newStudentIsAdmin').checked = false;
+
+    newStudentSeeAnswers = false;
+
+    renderNewStudentEyeBtn();
+
+    document.getElementById('addStudentError').textContent='';
+
+    addStudentOverlay.classList.add('show');
+
+    setTimeout(() => document.getElementById('newStudentName').focus(), 50);
+
+  });
+
   document.getElementById('cancelAddStudent').addEventListener('click', () => addStudentOverlay.classList.remove('show'));
+
   document.getElementById('createStudentBtn').addEventListener('click', () => {
+
     const name = document.getElementById('newStudentName').value.trim();
+
     const pw = document.getElementById('newStudentPassword').value;
+
     const canViewResults = document.getElementById('newStudentCanView').checked;
+
     const isAdmin = document.getElementById('newStudentIsAdmin').checked;
+
     const group = document.getElementById('newStudentGroup').value || null;
+
+    const canSeeAnswers = newStudentSeeAnswers;
+
     const err = document.getElementById('addStudentError');
+
     if(!name){
+
       err.textContent = "Ism kiriting.";
+
       return;
+
     }
+
     if(state.students.some(s => s.name === name)){
+
       err.textContent = "Bu ism bilan o'quvchi allaqachon mavjud.";
+
       return;
+
     }
-    state.students.push({ id: uid(), name, password: pw || '', canViewResults, isAdmin, group });
+
+    state.students.push({ id: uid(), name, password: pw || '', canViewResults, isAdmin, group, canSeeAnswers });
+
     saveState();
+
     addStudentOverlay.classList.remove('show');
+
     renderAdmin();
+
     toast(`"${name}" qo'shildi.`);
+
   });
 
   // ---------- Create test modal ----------
+
   const createTestOverlay = document.getElementById('createTestOverlay');
+
   const step1 = document.getElementById('createTestStep1');
+
   const step2 = document.getElementById('createTestStep2');
+
   let pendingTitle = '';
+
   let pendingQuestions = [];
+
   let pendingTimeLimit = 0;
+
   let pendingRandomize = false;
+
   let pendingGroupIds = [];
 
   function readTestMetaFields(){
+
     const rawLimit = document.getElementById('newTestTimeLimit').value.trim();
+
     pendingTimeLimit = rawLimit ? Math.max(0, parseInt(rawLimit, 10) || 0) : 0;
+
     pendingRandomize = document.getElementById('newTestRandomize').checked;
+
     pendingGroupIds = Array.from(document.querySelectorAll('#newTestGroupsChips input:checked')).map(i => i.value);
+
   }
 
   function finalizeQuestionsForSave(questions){
+
     return questions.map(q => ({
+
       id: q.id,
+
       text: q.text,
+
       options: q.options,
+
       correctIndexes: Array.isArray(q.correctIndexes) ? q.correctIndexes :
+
         (typeof q.correctIndex === 'number' && q.correctIndex !== null ? [q.correctIndex] : []),
+
       image: q.image || null,
+
       explanation: q.explanation || ''
+
     }));
+
   }
 
   function resetCreateTestModal(){
+
     document.getElementById('newTestTitle').value='';
+
     document.getElementById('newTestText').value='';
+
     document.getElementById('createTestError').textContent='';
+
     document.getElementById('reviewError').textContent='';
+
     document.getElementById('createTestSuccess').textContent='';
+
     step1.classList.remove('hidden');
+
     step2.classList.add('hidden');
+
   }
 
   document.getElementById('openCreateTest').addEventListener('click', () => {
+
     resetCreateTestModal();
+
     document.getElementById('newTestTimeLimit').value = '';
+
     document.getElementById('newTestRandomize').checked = false;
+
     document.getElementById('newTestForceReview').checked = false;
+
     const chipsBox = document.getElementById('newTestGroupsChips');
+
     if(state.groups.length === 0){
+
       chipsBox.innerHTML = '<div class="multi-hint">Hali guruh yaratilmagan — bu test barchaga ochiq bo\'ladi.</div>';
+
     } else {
+
       chipsBox.innerHTML = state.groups.map(g => `
+
         <label class="chip" data-group-chip="${g.id}">
+
           <input type="checkbox" value="${g.id}"> ${escapeHtml(g.name)}
+
         </label>
+
       `).join('');
+
       chipsBox.querySelectorAll('.chip').forEach(chip => {
+
         const input = chip.querySelector('input');
+
         input.addEventListener('change', () => chip.classList.toggle('checked', input.checked));
+
       });
+
     }
+
     createTestOverlay.classList.add('show');
+
   });
+
   document.getElementById('cancelCreateTest').addEventListener('click', () => createTestOverlay.classList.remove('show'));
+
   document.getElementById('backToStep1').addEventListener('click', () => {
+
     step2.classList.add('hidden');
+
     step1.classList.remove('hidden');
+
   });
 
   // Extracts one or more "A) text  B) text  C) text" style options from a single line.
+
   function extractOptionsFromLine(line){
-    const markerRegex = /\*?\(?([A-Da-d])\)?[\.\)]\s*/g;
+
+    const markerRegex = /\\*?\(?([A-Da-d])\)?[\.\)]\s*/g;
+
     const marks = [];
+
     let m;
+
     while((m = markerRegex.exec(line)) !== null){
+
       marks.push({ start: m.index, end: m.index + m[0].length, raw: m[0], letter: m[1].toUpperCase() });
+
     }
+
     if(marks.length === 0) return null;
+
     const results = [];
+
     for(let i = 0; i < marks.length; i++){
+
       const start = marks[i].end;
+
       const end = i + 1 < marks.length ? marks[i+1].start : line.length;
+
       const text = line.slice(start, end).trim().replace(/\s{2,}/g,' ');
+
       if(!text) continue;
+
       const idx = marks[i].letter.charCodeAt(0) - 65;
+
       const isCorrect = marks[i].raw.trim().startsWith('*');
+
       results.push({ idx, text, isCorrect });
+
     }
+
     return results.length ? results : null;
+
   }
 
   function parseTestText(text){
+
     const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+
     const questions = [];
+
     let current = null;
+
     const qStart = /^(\d+)[\.\)]\s*(.*)$/;
+
     const ansLine = /^javob\s*[:\-]?\s*([A-Da-d])/i;
 
     for(const line of lines){
+
       const qm = line.match(qStart);
+
       if(qm){
+
         if(current) questions.push(current);
+
         current = { id: uid(), number: parseInt(qm[1],10), text: qm[2].trim(), options: [], correctIndex: null };
+
         continue;
+
       }
+
       const am = line.match(ansLine);
+
       if(am && current){
+
         current.correctIndex = am[1].toUpperCase().charCodeAt(0) - 65;
+
         continue;
+
       }
+
       const opts = extractOptionsFromLine(line);
+
       if(opts && current){
+
         opts.forEach(o => {
+
           current.options[o.idx] = o.text;
+
           if(o.isCorrect) current.correctIndex = o.idx;
+
         });
+
         continue;
+
       }
+
       if(current && current.options.length === 0){
+
         current.text += ' ' + line;
+
       }
+
     }
+
     if(current) questions.push(current);
+
     questions.forEach(q => { q.options = q.options.filter(o => o !== undefined && o !== ''); });
+
     return questions.filter(q => q.options.length >= 2);
+
   }
 
   // Detects a trailing "Javoblar:" block (or a run of bare "1-B" style lines) and
+
   // separates it from the question text, returning { mainText, answerMap }.
+
   function extractAnswerKey(text){
+
     const lines = text.split(/\r?\n/);
+
     const headingRegex = /^\s*javoblar\s*[:\-]?\s*(.*)$/i;
+
     let keyText = null;
+
     let mainLines = lines.slice();
 
     for(let i = 0; i < lines.length; i++){
+
       const m = lines[i].match(headingRegex);
+
       if(m){
+
         const remainder = m[1] || '';
+
         const rest = lines.slice(i+1).join('\n');
+
         keyText = (remainder + '\n' + rest).trim();
+
         mainLines = lines.slice(0, i);
+
         break;
+
       }
+
     }
 
     if(keyText === null){
+
       const pureKeyLine = /^\s*(\d+)\s*[\.\)\-:]\s*([A-Da-d])\s*$/;
+
       let idx = lines.length - 1;
+
       let trailStart = -1;
+
       while(idx >= 0){
+
         const line = lines[idx].trim();
+
         if(line === ''){ idx--; continue; }
+
         if(pureKeyLine.test(line)){ trailStart = idx; idx--; continue; }
+
         break;
+
       }
+
       if(trailStart !== -1){
+
         const count = lines.slice(trailStart).filter(l => pureKeyLine.test(l.trim())).length;
+
         if(count >= 2){
+
           keyText = lines.slice(trailStart).join('\n');
+
           mainLines = lines.slice(0, trailStart);
+
         }
+
       }
+
     }
 
     const answerMap = {};
+
     if(keyText){
+
       const pairRegex = /(\d+)\s*[\.\)\-:]\s*([A-Da-d])/gi;
+
       let pm;
+
       while((pm = pairRegex.exec(keyText)) !== null){
+
         answerMap[parseInt(pm[1],10)] = pm[2].toUpperCase().charCodeAt(0) - 65;
+
       }
+
     }
+
     return { mainText: mainLines.join('\n'), answerMap };
+
   }
 
   document.getElementById('parseTestBtn').addEventListener('click', () => {
+
     const title = document.getElementById('newTestTitle').value.trim();
+
     const rawText = document.getElementById('newTestText').value;
+
     const err = document.getElementById('createTestError');
+
     err.textContent='';
+
     if(!title){
+
       err.textContent = "Test nomini kiriting.";
+
       return;
+
     }
+
     const { mainText, answerMap } = extractAnswerKey(rawText);
+
     const questions = parseTestText(mainText);
+
     if(questions.length === 0){
+
       err.textContent = "Savollar aniqlanmadi. Har bir savol raqam bilan boshlanishini va kamida 2 ta variant borligini tekshiring.";
+
       return;
+
     }
+
     questions.forEach(q => {
+
       if(q.correctIndex === null && answerMap.hasOwnProperty(q.number) && answerMap[q.number] < q.options.length){
+
         q.correctIndex = answerMap[q.number];
+
       }
+
     });
+
     pendingTitle = title;
+
     pendingQuestions = questions;
+
     readTestMetaFields();
 
     const allAnswered = questions.every(q => q.correctIndex !== null && q.correctIndex < q.options.length);
+
     const forceReview = document.getElementById('newTestForceReview').checked;
+
     if(allAnswered && !forceReview){
+
       state.tests.push({
+
         id: uid(), title: pendingTitle, questions: finalizeQuestionsForSave(pendingQuestions),
+
         timeLimitMin: pendingTimeLimit, randomize: pendingRandomize, groupIds: pendingGroupIds
+
       });
+
       saveState();
+
       renderAdmin();
+
       createTestOverlay.classList.remove('show');
+
       toast(`"${pendingTitle}" testi yaratildi.`);
+
       return;
+
     }
+
     renderReviewQuestions();
+
     step1.classList.add('hidden');
+
     step2.classList.remove('hidden');
+
   });
 
   function renderReviewQuestions(){
+
     const area = document.getElementById('reviewQuestions');
+
     area.innerHTML = '';
+
     pendingQuestions.forEach((q, qi) => {
+
       if(!Array.isArray(q.correctIndexes)){
+
         q.correctIndexes = (typeof q.correctIndex === 'number' && q.correctIndex !== null) ? [q.correctIndex] : [];
+
       }
+
       if(q.image === undefined) q.image = null;
+
       if(typeof q.explanation !== 'string') q.explanation = '';
 
       const block = document.createElement('div');
+
       block.className = 'q-block';
+
       let optsHtml = '';
+
       q.options.forEach((opt, oi) => {
+
         const letter = String.fromCharCode(65+oi);
+
         const checked = q.correctIndexes.includes(oi) ? 'checked' : '';
+
         optsHtml += `
+
           <div class="opt-row">
+
             <input type="checkbox" name="rev_${q.id}" id="rev_${q.id}_${oi}" value="${oi}" ${checked}>
+
             <label for="rev_${q.id}_${oi}">${letter}) ${escapeHtml(opt)}</label>
+
           </div>
+
         `;
+
       });
+
       block.innerHTML = `
+
         <div class="q-title"><span class="q-num">${qi+1}.</span> ${escapeHtml(q.text)}</div>
+
         ${q.image ? `<img class="q-image" src="${q.image}">` : ''}
+
         <div class="multi-hint">Bir nechta to'g'ri javob bo'lishi mumkin — kerakli variant(lar)ni belgilang.</div>
+
         ${optsHtml}
+
         <div class="q-image-tools">
+
           <input type="file" accept="image/*" class="hidden rev-image-input" id="revimg_${q.id}">
+
           <button type="button" class="small rev-image-btn">${q.image ? 'Rasmni almashtirish' : 'Rasm qo\'shish'}</button>
+
           ${q.image ? `<button type="button" class="small danger rev-image-remove">Rasmni olib tashlash</button>` : ''}
+
         </div>
+
         <textarea class="explain-input rev-explain" placeholder="Izoh (ixtiyoriy) — javob to'g'ri/xato bo'lishi sababini tushuntiring">${escapeHtml(q.explanation)}</textarea>
+
       `;
+
       block.querySelector('.rev-explain').addEventListener('input', (e) => { q.explanation = e.target.value; });
+
       const fileInput = block.querySelector('.rev-image-input');
+
       block.querySelector('.rev-image-btn').addEventListener('click', () => fileInput.click());
+
       fileInput.addEventListener('change', (e) => {
+
         const file = e.target.files && e.target.files[0];
+
         if(!file) return;
+
         const reader = new FileReader();
+
         reader.onload = () => { q.image = reader.result; renderReviewQuestions(); };
+
         reader.readAsDataURL(file);
+
       });
+
       const removeBtn = block.querySelector('.rev-image-remove');
+
       if(removeBtn){
+
         removeBtn.addEventListener('click', () => { q.image = null; renderReviewQuestions(); });
+
       }
+
       area.appendChild(block);
+
     });
+
   }
 
   document.getElementById('saveTestBtn').addEventListener('click', () => {
+
     const err = document.getElementById('reviewError');
+
     const ok = document.getElementById('createTestSuccess');
+
     err.textContent=''; ok.textContent='';
+
     let allSelected = true;
+
     pendingQuestions.forEach(q => {
+
       const checked = Array.from(document.querySelectorAll(`input[name="rev_${q.id}"]:checked`)).map(i => parseInt(i.value, 10));
+
       if(checked.length > 0){
+
         q.correctIndexes = checked;
+
       } else {
+
         allSelected = false;
+
       }
+
     });
+
     if(!allSelected){
+
       err.textContent = "Har bir savol uchun kamida bitta to'g'ri javobni belgilang.";
+
       return;
+
     }
+
     readTestMetaFields();
+
     state.tests.push({
+
       id: uid(), title: pendingTitle, questions: finalizeQuestionsForSave(pendingQuestions),
+
       timeLimitMin: pendingTimeLimit, randomize: pendingRandomize, groupIds: pendingGroupIds
+
     });
+
     saveState();
+
     ok.textContent = `${pendingQuestions.length} ta savol muvaffaqiyatli qo'shildi.`;
+
     renderAdmin();
+
     toast(`"${pendingTitle}" testi yaratildi.`);
+
     setTimeout(() => { createTestOverlay.classList.remove('show'); }, 700);
+
   });
 
   // ---------- Student home ----------
+
   function renderStudentHome(){
+
     const st = state.students.find(s => s.id === session.id);
+
     document.getElementById('studentWho').textContent = st.name;
+
     renderProfileFabs();
 
     const permArea = document.getElementById('studentPermissionsArea');
+
     permArea.innerHTML = '';
+
     if(st.canViewResults){
+
       permArea.innerHTML = `
+
         <div class="toolbar">
+
           <div class="toolbar-left"><span class="whoami">Sizga boshqa o'quvchilar natijalarini ko'rish huquqi berilgan</span></div>
+
           <div class="toolbar-right"><button id="studentExportCsvBtn">CSV yuklab olish</button></div>
+
         </div>
+
         <div class="section-title">Boshqa o'quvchilar natijalari</div>
+
         <div class="grid-cards" id="allStudentsGrid"></div>
+
         <div class="divider"></div>
+
       `;
+
       document.getElementById('studentExportCsvBtn').addEventListener('click', exportResultsCsv);
+
       const grid = document.getElementById('allStudentsGrid');
+
       if(state.students.length === 0){
+
         grid.innerHTML = '<div class="empty-state">Hali o\'quvchi yo\'q.</div>';
+
       } else {
+
         state.students.forEach(s => {
+
           const results = state.results.filter(r => r.studentId === s.id);
+
           const div = document.createElement('div');
+
           div.className = 'item-card';
+
           div.innerHTML = `<div class="name">${escapeHtml(s.name)}</div><div class="meta">${results.length} ta test topshirilgan</div>`;
+
           div.addEventListener('click', () => openStudentDetail(s.id));
+
           grid.appendChild(div);
+
         });
+
       }
+
     }
 
     const doneTestIds = state.results.filter(r => r.studentId === st.id).map(r => r.testId);
 
     const avail = document.getElementById('availableTestsGrid');
+
     avail.innerHTML = '';
+
     const availableTests = state.tests.filter(t => !doneTestIds.includes(t.id) && testVisibleToStudent(t, st));
+
     if(availableTests.length === 0){
+
       avail.innerHTML = '<div class="empty-state">Hozircha mavjud test yo\'q.</div>';
+
     } else {
+
       availableTests.forEach(t => {
+
         const div = document.createElement('div');
+
         div.className = 'item-card';
+
         let badges = `<span class="mini-badge">${t.questions.length} ta savol</span>`;
+
         if(t.timeLimitMin > 0) badges += `<span class="mini-badge timer">⏱ ${t.timeLimitMin} daq</span>`;
+
         if(t.randomize) badges += `<span class="mini-badge shuffle">Aralash</span>`;
+
         div.innerHTML = `<div class="name">${escapeHtml(t.title)}</div><div class="badges">${badges}</div>`;
+
         div.addEventListener('click', () => openTakeTest(t.id));
+
         avail.appendChild(div);
+
       });
+
     }
 
     const done = document.getElementById('doneTestsGrid');
+
     done.innerHTML = '';
+
     const doneResults = state.results.filter(r => r.studentId === st.id);
+
     if(doneResults.length === 0){
+
       done.innerHTML = '<div class="empty-state">Hali test topshirmagansiz.</div>';
+
     } else {
+
       doneResults.forEach(r => {
+
         const t = state.tests.find(x => x.id === r.testId);
+
         const pct = pctForResult(r);
+
         const div = document.createElement('div');
+
         div.className = 'item-card';
+
         div.innerHTML = `<div class="name">${escapeHtml(t ? t.title : "O'chirilgan test")}</div><div class="meta"><span class="stamp ${stampClass(pct)}">${r.score}/${r.total} · ${pct}%</span></div>`;
+
         done.appendChild(div);
+
       });
+
     }
+
   }
 
   let activeTakeTest = null;
+
   let takeTestStartedAt = null;
+
   let testTimerInterval = null;
 
   function updateTakeTestProgress(){
+
     if(!activeTakeTest) return;
+
     const total = activeTakeTest.questions.length;
+
     let answered = 0;
+
     activeTakeTest.questions.forEach(q => {
+
       const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+
       const block = document.querySelector(`.q-block[data-qid="${q.id}"]`);
+
       if(checked){ answered++; if(block) block.classList.add('answered'); }
+
       else if(block){ block.classList.remove('answered'); }
+
     });
+
     document.getElementById('progressLabel').textContent = `${answered}/${total}`;
+
     document.getElementById('progressFill').style.width = total ? (answered/total*100) + '%' : '0%';
+
   }
 
   function shuffleArray(arr){
+
     const a = arr.slice();
+
     for(let i = a.length - 1; i > 0; i--){
+
       const j = Math.floor(Math.random() * (i+1));
+
       [a[i], a[j]] = [a[j], a[i]];
+
     }
+
     return a;
+
   }
 
   function stopTestTimer(){
+
     if(testTimerInterval){ clearInterval(testTimerInterval); testTimerInterval = null; }
+
     document.getElementById('testTimerPill').classList.add('hidden');
+
   }
 
   function startTestTimer(minutes){
+
     const pill = document.getElementById('testTimerPill');
+
     const textEl = document.getElementById('timerText');
+
     pill.classList.remove('hidden', 'warn');
+
     let remaining = minutes * 60;
+
     textEl.textContent = formatClock(remaining);
+
     testTimerInterval = setInterval(() => {
+
       remaining--;
+
       if(remaining <= 0){
+
         stopTestTimer();
+
         toast("Vaqt tugadi — test avtomatik yuborildi.", 'err');
+
         finalizeTestSubmit();
+
         return;
+
       }
+
       textEl.textContent = formatClock(remaining);
+
       pill.classList.toggle('warn', remaining <= 30);
+
     }, 1000);
+
   }
 
   // Anti-cheat: if the student switches tabs, opens a new window, minimizes
+
   // the browser, or leaves the page while a test is active, submit it immediately.
+
   function handleTestTabLeave(){
+
     if(!activeTakeTest) return;
+
     if(document.hidden){
+
       toast("Sahifadan chiqib ketganingiz uchun test avtomatik yakunlandi.", 'err');
+
       finalizeTestSubmit();
+
     }
+
   }
+
   document.addEventListener('visibilitychange', handleTestTabLeave);
 
   function openTakeTest(testId){
+
     const test = state.tests.find(t => t.id === testId);
+
     const questions = test.randomize ? shuffleArray(test.questions) : test.questions.slice();
+
     activeTakeTest = { id: test.id, title: test.title, timeLimitMin: test.timeLimitMin, questions };
+
     takeTestStartedAt = Date.now();
+
     document.getElementById('takeTestTitle').textContent = test.title;
+
     const container = document.getElementById('takeTestQuestions');
+
     container.innerHTML = '';
+
+    // Students granted the "see answers" privilege (set when they were added)
+
+    // get the correct option(s) highlighted live, right on the test screen.
+
+    const currentStudent = session.role === 'student' ? state.students.find(s => s.id === session.id) : null;
+
+    const revealAnswers = session.role === 'admin' || session.role === 'subadmin' || !!(currentStudent && currentStudent.canSeeAnswers);
+
     questions.forEach((q, i) => {
+
       const block = document.createElement('div');
+
       block.className = 'q-block';
+
       block.dataset.qid = q.id;
+
       const isMulti = (q.correctIndexes || []).length > 1;
+
       const inputType = isMulti ? 'checkbox' : 'radio';
+
       let optsHtml = '';
+
       q.options.forEach((opt, oi) => {
+
         const letter = String.fromCharCode(65+oi);
+
+        const isCorrectOpt = revealAnswers && (q.correctIndexes || []).includes(oi);
+
         optsHtml += `
-          <div class="opt-row">
+
+          <div class="opt-row${isCorrectOpt ? ' correct-hint' : ''}">
+
             <input type="${inputType}" name="q_${q.id}" id="q_${q.id}_${oi}" value="${oi}">
+
             <label for="q_${q.id}_${oi}">${letter}) ${escapeHtml(opt)}</label>
+
+            ${isCorrectOpt ? `<span class="correct-hint-tag">✓ to'g'ri</span>` : ''}
+
           </div>
+
         `;
+
       });
+
       block.innerHTML = `
+
         <div class="q-title"><span class="q-num">${i+1}.</span> ${escapeHtml(q.text)}</div>
+
         ${q.image ? `<img class="q-image" src="${q.image}">` : ''}
+
         ${isMulti ? `<div class="multi-hint">Bir nechta javob to'g'ri bo'lishi mumkin.</div>` : ''}
+
         ${optsHtml}
+
       `;
+
       container.appendChild(block);
+
     });
+
     container.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(inp => {
+
       inp.addEventListener('change', updateTakeTestProgress);
+
     });
+
     updateTakeTestProgress();
+
     stopTestTimer();
+
     if(test.timeLimitMin > 0){
+
       startTestTimer(test.timeLimitMin);
+
     }
+
     show('takeTestScreen');
+
   }
 
   document.getElementById('backFromTest').addEventListener('click', () => {
+
     stopTestTimer();
+
     activeTakeTest = null;
-    renderStudentHome();
-    show('studentScreen');
+
+    if(session.role === 'admin' || session.role === 'subadmin'){
+
+      renderAdmin();
+
+      show('adminScreen');
+
+    } else {
+
+      renderStudentHome();
+
+      show('studentScreen');
+
+    }
+
   });
 
   function finalizeTestSubmit(){
+
     if(!activeTakeTest) return;
+
     stopTestTimer();
+
     const answers = [];
+
     let score = 0;
+
     activeTakeTest.questions.forEach(q => {
+
       const checked = Array.from(document.querySelectorAll(`input[name="q_${q.id}"]:checked`)).map(i => parseInt(i.value, 10));
+
       if(arraysEqualAsSets(checked, q.correctIndexes || [])) score++;
+
       answers.push({ questionId: q.id, selectedIndexes: checked });
+
     });
+
     const timeTakenSec = takeTestStartedAt ? Math.round((Date.now() - takeTestStartedAt) / 1000) : null;
-    state.results.push({
-      id: uid(), studentId: session.id, testId: activeTakeTest.id,
-      answers, score, total: activeTakeTest.questions.length, takenAt: Date.now(), timeTakenSec
-    });
-    saveState();
+
+    const isAdminSession = session.role === 'admin' || session.role === 'subadmin';
+
+    if(!isAdminSession){
+
+      state.results.push({
+
+        id: uid(), studentId: session.id, testId: activeTakeTest.id,
+
+        answers, score, total: activeTakeTest.questions.length, takenAt: Date.now(), timeTakenSec
+
+      });
+
+      saveState();
+
+    }
+
     toast(`Natija: ${score}/${activeTakeTest.questions.length}`);
+
     activeTakeTest = null;
-    renderStudentHome();
-    show('studentScreen');
+
+    if(isAdminSession){
+
+      renderAdmin();
+
+      show('adminScreen');
+
+    } else {
+
+      renderStudentHome();
+
+      show('studentScreen');
+
+    }
+
   }
 
   document.getElementById('submitTestBtn').addEventListener('click', () => {
+
     if(!activeTakeTest) return;
+
     const total = activeTakeTest.questions.length;
+
     let answered = 0;
+
     activeTakeTest.questions.forEach(q => {
+
       if(document.querySelector(`input[name="q_${q.id}"]:checked`)) answered++;
+
     });
+
     if(answered < total){
+
       askConfirm("Ba'zi savollar javobsiz", `${total - answered} ta savolga javob berilmagan. Baribir yuborilsinmi?`, finalizeTestSubmit);
+
       return;
+
     }
+
     finalizeTestSubmit();
+
   });
 
   function escapeHtml(str){
+
     const d = document.createElement('div');
+
     d.textContent = str == null ? '' : String(str);
+
     return d.innerHTML;
+
   }
 
   boot();
+
 })();
+
 </script>
+
 </body>
+
 </html>
